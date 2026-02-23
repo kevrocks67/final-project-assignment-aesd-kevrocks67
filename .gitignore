@@ -53,3 +53,13 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# Build artifacts
+build/
+bin/*
+!bin/.gitkeep
+.cache/
+
+# Doxygen artifacts
+docs/html/
+docs/latex/
