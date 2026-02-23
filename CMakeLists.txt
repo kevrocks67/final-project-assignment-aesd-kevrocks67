@@ -43,12 +43,18 @@ endif()
 find_package(Doxygen)
 
 if (DOXYGEN_FOUND)
-    # Define the command to run: doxygen Doxyfile
+    # By NOT using the 'ALL' keyword here, the docs won't build
+    # unless you explicitly run 'make docs'
     add_custom_target(docs
         COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
-        COMMENT "Generating API documentation with Doxygen"
+        COMMENT "Generating API documentation"
         VERBATIM)
+
+    # If the option is ON, we make the docs a dependency of the main build
+    if(BUILD_DOCS)
+        add_dependencies(door_security_daemon docs)
+    endif()
 endif()
 
 # 6. Buildroot Installation Rules
