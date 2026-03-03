@@ -19,17 +19,19 @@ static struct input_event create_press_event(int code) {
 }
 
 void test_valid_digits(void) {
-    // Test Key '1'
-    struct input_event ev = create_press_event(KEY_1);
-    KeyEvent result = process_keypad_event(&ev);
-    TEST_ASSERT_EQUAL_INT(KEY_CMD_NUMBER, result.cmd);
-    TEST_ASSERT_EQUAL_INT(1, result.data.key_number); // Accessing the union
+    // Needed since KEY_ is a macro preventing us from using sprintf
+    const int KEY_MAP[] = {
+        KEY_0, KEY_1, KEY_2, KEY_3, KEY_4,
+        KEY_5, KEY_6, KEY_7, KEY_8, KEY_9
+    };
 
-    // Test Key '0'
-    ev = create_press_event(KEY_0);
-    result = process_keypad_event(&ev);
-    TEST_ASSERT_EQUAL_INT(KEY_CMD_NUMBER, result.cmd);
-    TEST_ASSERT_EQUAL_INT(0, result.data.key_number);
+    // Test Keys 0-9
+    for (int input_digit = 0; input_digit < 10; input_digit++) {
+        struct input_event ev = create_press_event(KEY_MAP[input_digit]);
+        KeyEvent result = process_keypad_event(&ev);
+        TEST_ASSERT_EQUAL_INT(KEY_CMD_NUMBER, result.cmd);
+        TEST_ASSERT_EQUAL_INT(input_digit, result.data.key_number);
+    }
 }
 
 void test_special_keys(void) {
@@ -62,10 +64,19 @@ void test_ignore_non_key_events(void) {
     TEST_ASSERT_EQUAL_INT(KEY_CMD_NONE, result.cmd);
 }
 
+void test_unknown_key(void) {
+    // KEY_VOLUMEUP is a valid Linux key but not in our switch
+    struct input_event ev = create_press_event(KEY_VOLUMEUP);
+    KeyEvent result = process_keypad_event(&ev);
+
+    TEST_ASSERT_EQUAL_INT(KEY_CMD_NONE, result.cmd);
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_valid_digits);
     RUN_TEST(test_special_keys);
+    RUN_TEST(test_unknown_key);
     RUN_TEST(test_ignore_non_key_events);
     return UNITY_END();
 }
