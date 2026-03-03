@@ -1,3 +1,12 @@
+/**
+* @file keypad_parser.c
+* @brief Implementation details for the keypad translation logic.
+*
+* @note This implementation specifically filters for EV_KEY and value 1.
+* Release events (value 0) are explicitly ignored to prevent double-triggering
+* on mechanical key bounces.
+*/
+
 #include "keypad_parser.h"
 #include <linux/input.h>
 #include <string.h>
@@ -57,6 +66,7 @@ KeyEvent process_keypad_event(const struct input_event* ev) {
                 result.cmd = KEY_CMD_CANCEL;
                 break;
             default:
+                // Implicitly handled by result struct KEY_CMD_NONE initialization
                 break;
         }
     }

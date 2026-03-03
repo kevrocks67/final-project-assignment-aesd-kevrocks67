@@ -3,7 +3,8 @@ project(door-security-daemon C)
 
 # --- 1. Global Options & Functions ---
 option(ENABLE_COVERAGE "Enable coverage instrumentation" OFF)
-option(BUILD_TESTING "Build unit tests" ON)
+option(BUILD_TESTING "Build unit tests" OFF)
+option(BUILD_DOCS "Build API documentation" OFF)
 
 # Helper function to instrument targets for coverage
 # Using PUBLIC ensures executables inherit the flags from libraries
@@ -16,10 +17,10 @@ function(enable_coverage_for_target target_name)
 endfunction()
 
 # --- 2. Standard C Settings ---
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS true)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 include_directories(include)
 
@@ -27,6 +28,11 @@ include_directories(include)
 add_library(keypad_parser STATIC src/keypad_parser.c)
 enable_coverage_for_target(keypad_parser)
 target_include_directories(keypad_parser PUBLIC include)
+
+add_library(pin_entry STATIC src/pin_entry.c)
+enable_coverage_for_target(pin_entry)
+target_include_directories(pin_entry PUBLIC include)
+target_link_libraries(pin_entry PRIVATE keypad_parser)
 
 add_library(lock_logic STATIC src/lock.c)
 enable_coverage_for_target(lock_logic)
@@ -45,10 +51,15 @@ if(BUILD_TESTING)
     enable_testing()
     set(ENV{CTEST_OUTPUT_ON_FAILURE} 1)
 
-    # Keypad Tests
-    add_executable(test_keypad tests/test_keypad_parser.c)
-    target_link_libraries(test_keypad PRIVATE keypad_parser unity)
-    add_test(NAME KeypadUnitTests COMMAND test_keypad)
+    # Keypad Parser Tests
+    add_executable(test_keypad_parser tests/test_keypad_parser.c)
+    target_link_libraries(test_keypad_parser PRIVATE keypad_parser unity)
+    add_test(NAME KeypadParserUnitTests COMMAND test_keypad_parser)
+
+    # Pin Entry Tests
+    add_executable(test_pin_entry tests/test_pin_entry.c)
+    target_link_libraries(test_pin_entry PRIVATE pin_entry unity)
+    add_test(NAME PinEntryUnitTests COMMAND test_pin_entry)
 
     # Lock Logic Tests
     add_executable(test_lock tests/test_lock.c)
@@ -83,5 +94,19 @@ if(BUILD_TESTING)
     endif()
 endif()
 
-# --- 7. Buildroot Installation ---
+# --- 7. Doxygen Documentation ---
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+    # This creates the 'make docs' command
+    add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
+        COMMENT "Generating API documentation..."
+    )
+    if(BUILD_DOCS)
+        add_dependencies(door_security_daemon docs)
+    endif()
+endif()
+
+# --- 8. Buildroot Installation ---
 install(TARGETS door_security_daemon DESTINATION bin)
