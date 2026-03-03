@@ -1,5 +1,5 @@
-#ifndef KEYPAD_LOGIC_H
-#define KEYPAD_LOGIC_H
+#ifndef KEYPAD_PARSER_H
+#define KEYPAD_PARSER_H
 
 #include <linux/input.h>
 
@@ -23,4 +23,4 @@ typedef struct {
  */
 KeyEvent process_keypad_event(const struct input_event* ev);
 
-#endif
+#endif //KEYPAD_PARSER_H

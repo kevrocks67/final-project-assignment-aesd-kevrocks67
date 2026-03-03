@@ -24,9 +24,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 include_directories(include)
 
 # --- 3. Libraries ---
-add_library(keypad_logic STATIC src/keypad_logic.c)
-enable_coverage_for_target(keypad_logic)
-target_include_directories(keypad_logic PUBLIC include)
+add_library(keypad_parser STATIC src/keypad_parser.c)
+enable_coverage_for_target(keypad_parser)
+target_include_directories(keypad_parser PUBLIC include)
 
 add_library(lock_logic STATIC src/lock.c)
 enable_coverage_for_target(lock_logic)
@@ -34,7 +34,7 @@ target_include_directories(lock_logic PUBLIC include)
 
 # --- 4. Main Application ---
 add_executable(door_security_daemon src/main.c)
-target_link_libraries(door_security_daemon PRIVATE keypad_logic lock_logic)
+target_link_libraries(door_security_daemon PRIVATE keypad_parser lock_logic)
 
 # --- 5. External Dependencies ---
 # Ensure you re-init your submodules! (git submodule update --init)
@@ -45,9 +45,9 @@ if(BUILD_TESTING)
     enable_testing()
     set(ENV{CTEST_OUTPUT_ON_FAILURE} 1)
 
-    # Keypad Logic Tests
-    add_executable(test_keypad tests/test_keypad_logic.c)
-    target_link_libraries(test_keypad PRIVATE keypad_logic unity)
+    # Keypad Tests
+    add_executable(test_keypad tests/test_keypad_parser.c)
+    target_link_libraries(test_keypad PRIVATE keypad_parser unity)
     add_test(NAME KeypadUnitTests COMMAND test_keypad)
 
     # Lock Logic Tests
