@@ -1,62 +1,87 @@
 cmake_minimum_required(VERSION 3.10)
 project(door-security-daemon C)
 
-# 1. Standard C Settings
+# --- 1. Global Options & Functions ---
+option(ENABLE_COVERAGE "Enable coverage instrumentation" OFF)
+option(BUILD_TESTING "Build unit tests" ON)
+
+# Helper function to instrument targets for coverage
+# Using PUBLIC ensures executables inherit the flags from libraries
+function(enable_coverage_for_target target_name)
+    if(ENABLE_COVERAGE)
+        message(STATUS "Enabling coverage instrumentation for: ${target_name}")
+        target_compile_options(${target_name} PUBLIC --coverage)
+        target_link_options(${target_name} PUBLIC --coverage)
+    endif()
+endfunction()
+
+# --- 2. Standard C Settings ---
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 
-# 2. Include Directories
-# This tells the compiler where to look for your .h files
 include_directories(include)
 
-# 3. Main Application Modules
-# Add logic.c and main.c to the executable
-add_executable(door_security_daemon
-    src/main.c
-    src/lock.c
-)
+# --- 3. Libraries ---
+add_library(keypad_logic STATIC src/keypad_logic.c)
+enable_coverage_for_target(keypad_logic)
+target_include_directories(keypad_logic PUBLIC include)
 
-# 4. External Dependencies (Unity)
-# This adds the Unity library to the project via the submodule folder
+add_library(lock_logic STATIC src/lock.c)
+enable_coverage_for_target(lock_logic)
+target_include_directories(lock_logic PUBLIC include)
+
+# --- 4. Main Application ---
+add_executable(door_security_daemon src/main.c)
+target_link_libraries(door_security_daemon PRIVATE keypad_logic lock_logic)
+
+# --- 5. External Dependencies ---
+# Ensure you re-init your submodules! (git submodule update --init)
 add_subdirectory(external/Unity)
 
-# 5. Testing Infrastructure
-# We only want to build tests if requested (Buildroot will usually turn this OFF)
-option(BUILD_TESTING "Build unit tests" ON)
-
+# --- 6. Testing Infrastructure ---
 if(BUILD_TESTING)
     enable_testing()
+    set(ENV{CTEST_OUTPUT_ON_FAILURE} 1)
 
-    # Create the test runner
-    add_executable(unit_tests tests/test_lock.c src/main.c src/lock.c)
+    # Keypad Logic Tests
+    add_executable(test_keypad tests/test_keypad_logic.c)
+    target_link_libraries(test_keypad PRIVATE keypad_logic unity)
+    add_test(NAME KeypadUnitTests COMMAND test_keypad)
 
-    # Link against the unity library provided by add_subdirectory
-    # Unity's own CMake handles its header paths automatically
-    target_link_libraries(unit_tests PRIVATE unity)
+    # Lock Logic Tests
+    add_executable(test_lock tests/test_lock.c)
+    target_link_libraries(test_lock PRIVATE lock_logic unity)
+    add_test(NAME LockUnitTests COMMAND test_lock)
 
-    # Register the test with CTest
-    add_test(NAME LockTest COMMAND unit_tests)
-endif()
+    # Unified Coverage Report Target
+    find_program(LCOV_PATH lcov)
+    find_program(GENHTML_PATH genhtml)
 
-find_package(Doxygen)
-
-if (DOXYGEN_FOUND)
-    # By NOT using the 'ALL' keyword here, the docs won't build
-    # unless you explicitly run 'make docs'
-    add_custom_target(docs
-        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
-        COMMENT "Generating API documentation"
-        VERBATIM)
-
-    # If the option is ON, we make the docs a dependency of the main build
-    if(BUILD_DOCS)
-        add_dependencies(door_security_daemon docs)
+    if(LCOV_PATH AND ENABLE_COVERAGE)
+        add_custom_target(coverage
+            # The '-' allows report generation even if a test fails
+            COMMAND -${CMAKE_CTEST_COMMAND} --output-on-failure
+            # Capture all data, ignore system/path/unused errors
+            COMMAND ${LCOV_PATH} --directory . --capture --output-file coverage.info --no-external --ignore-errors path,unused --base-directory ${CMAKE_SOURCE_DIR}
+            # Extract only our source code
+            COMMAND ${LCOV_PATH} --extract coverage.info "${CMAKE_SOURCE_DIR}/src/*" --output-file coverage.info --ignore-errors unused
+            # Generate HTML
+            COMMAND ${GENHTML_PATH} coverage.info --output-directory coverage_report
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            COMMENT "Report: build/coverage_report/index.html"
+        )
+        # This target ONLY generates the HTML, it doesn't run tests
+        add_custom_target(coverage_report
+            COMMAND ${LCOV_PATH} --directory . --capture --output-file coverage.info --no-external --ignore-errors path,unused --base-directory ${CMAKE_SOURCE_DIR}
+            COMMAND ${LCOV_PATH} --extract coverage.info "${CMAKE_SOURCE_DIR}/src/*" --output-file coverage.info --ignore-errors unused
+            COMMAND ${GENHTML_PATH} coverage.info --output-directory coverage_report
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            COMMENT "Generating HTML report from existing test data..."
+        )
     endif()
 endif()
 
-# 6. Buildroot Installation Rules
-# This tells Buildroot where to put the binary on the BBB (usually /usr/bin)
+# --- 7. Buildroot Installation ---
 install(TARGETS door_security_daemon DESTINATION bin)
