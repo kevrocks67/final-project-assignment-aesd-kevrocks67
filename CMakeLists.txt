@@ -46,10 +46,20 @@ add_library(input_utils STATIC src/input_utils.c)
 enable_coverage_for_target(input_utils)
 target_include_directories(input_utils PUBLIC include)
 
+# --- FSM Library ---
+# Includes the engine, the transition table, and the logic handlers
+add_library(fsm_core STATIC
+    src/fsm.c
+    src/fsm_table.c
+    src/fsm_handlers.c
+)
+enable_coverage_for_target(fsm_core)
+target_include_directories(fsm_core PUBLIC include)
+
 # --- 4. Main Application ---
 add_executable(door_security_daemon src/main.c)
 target_link_libraries(door_security_daemon PRIVATE keypad_parser lock_logic
-    door_sensor pin_entry input_utils)
+    door_sensor pin_entry input_utils fsm_core)
 
 # --- 5. External Dependencies ---
 # Ensure you re-init your submodules! (git submodule update --init)
@@ -84,6 +94,16 @@ if(BUILD_TESTING)
     add_executable(test_input_utils tests/test_input_utils.c)
     target_link_libraries(test_input_utils PRIVATE input_utils unity)
     add_test(NAME InputUtilsUnitTests COMMAND test_input_utils)
+
+    # FSM Integration Tests
+    add_executable(test_fsm tests/test_fsm.c)
+    # Use linker flags to force including all objects from the static library
+    if(APPLE)
+        target_link_libraries(test_fsm PRIVATE -Wl,-force_load fsm_core unity)
+    else()
+        target_link_libraries(test_fsm PRIVATE -Wl,--whole-archive fsm_core -Wl,--no-whole-archive unity)
+    endif()
+    add_test(NAME FsmIntegrationTests COMMAND test_fsm)
 
     # Unified Coverage Report Target
     find_program(LCOV_PATH lcov)
