@@ -42,10 +42,14 @@ add_library(door_sensor STATIC src/door_sensor.c)
 enable_coverage_for_target(door_sensor)
 target_include_directories(door_sensor PUBLIC include)
 
+add_library(input_utils STATIC src/input_utils.c)
+enable_coverage_for_target(input_utils)
+target_include_directories(input_utils PUBLIC include)
+
 # --- 4. Main Application ---
 add_executable(door_security_daemon src/main.c)
 target_link_libraries(door_security_daemon PRIVATE keypad_parser lock_logic
-    door_sensor pin_entry)
+    door_sensor pin_entry input_utils)
 
 # --- 5. External Dependencies ---
 # Ensure you re-init your submodules! (git submodule update --init)
@@ -75,6 +79,11 @@ if(BUILD_TESTING)
     add_executable(test_door_sensor tests/test_door_sensor.c)
     target_link_libraries(test_door_sensor PRIVATE door_sensor unity)
     add_test(NAME DoorSensorUnitTests COMMAND test_door_sensor)
+
+    # Input Utils Tests
+    add_executable(test_input_utils tests/test_input_utils.c)
+    target_link_libraries(test_input_utils PRIVATE input_utils unity)
+    add_test(NAME InputUtilsUnitTests COMMAND test_input_utils)
 
     # Unified Coverage Report Target
     find_program(LCOV_PATH lcov)
