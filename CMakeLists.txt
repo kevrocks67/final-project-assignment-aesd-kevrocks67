@@ -9,11 +9,11 @@ option(BUILD_DOCS "Build API documentation" OFF)
 # Helper function to instrument targets for coverage
 # Using PUBLIC ensures executables inherit the flags from libraries
 function(enable_coverage_for_target target_name)
-    if(ENABLE_COVERAGE)
-        message(STATUS "Enabling coverage instrumentation for: ${target_name}")
-        target_compile_options(${target_name} PUBLIC --coverage)
-        target_link_options(${target_name} PUBLIC --coverage)
-    endif()
+  if(ENABLE_COVERAGE)
+    message(STATUS "Enabling coverage instrumentation for: ${target_name}")
+    target_compile_options(${target_name} PUBLIC --coverage)
+    target_link_options(${target_name} PUBLIC --coverage)
+  endif()
 endfunction()
 
 # --- 2. Standard C Settings ---
@@ -67,84 +67,81 @@ add_subdirectory(external/Unity)
 
 # --- 6. Testing Infrastructure ---
 if(BUILD_TESTING)
-    enable_testing()
-    set(ENV{CTEST_OUTPUT_ON_FAILURE} 1)
+  enable_testing()
+  set(ENV{CTEST_OUTPUT_ON_FAILURE} 1)
 
-    # Keypad Parser Tests
-    add_executable(test_keypad_parser tests/test_keypad_parser.c)
-    target_link_libraries(test_keypad_parser PRIVATE keypad_parser unity)
-    add_test(NAME KeypadParserUnitTests COMMAND test_keypad_parser)
+  # Keypad Parser Tests
+  add_executable(test_keypad_parser tests/test_keypad_parser.c)
+  target_link_libraries(test_keypad_parser PRIVATE keypad_parser unity)
+  add_test(NAME KeypadParserUnitTests COMMAND test_keypad_parser)
 
-    # Pin Entry Tests
-    add_executable(test_pin_entry tests/test_pin_entry.c)
-    target_link_libraries(test_pin_entry PRIVATE pin_entry unity)
-    add_test(NAME PinEntryUnitTests COMMAND test_pin_entry)
+  # Pin Entry Tests
+  add_executable(test_pin_entry tests/test_pin_entry.c)
+  target_link_libraries(test_pin_entry PRIVATE pin_entry unity)
+  add_test(NAME PinEntryUnitTests COMMAND test_pin_entry)
 
-    # Lock Logic Tests
-    add_executable(test_lock tests/test_lock.c)
-    target_link_libraries(test_lock PRIVATE lock_logic unity)
-    add_test(NAME LockUnitTests COMMAND test_lock)
+  # Lock Logic Tests
+  add_executable(test_lock tests/test_lock.c)
+  target_link_libraries(test_lock PRIVATE lock_logic unity)
+  add_test(NAME LockUnitTests COMMAND test_lock)
 
-    # Door Sensor Tests
-    add_executable(test_door_sensor tests/test_door_sensor.c)
-    target_link_libraries(test_door_sensor PRIVATE door_sensor unity)
-    add_test(NAME DoorSensorUnitTests COMMAND test_door_sensor)
+  # Door Sensor Tests
+  add_executable(test_door_sensor tests/test_door_sensor.c)
+  target_link_libraries(test_door_sensor PRIVATE door_sensor unity)
+  add_test(NAME DoorSensorUnitTests COMMAND test_door_sensor)
 
-    # Input Utils Tests
-    add_executable(test_input_utils tests/test_input_utils.c)
-    target_link_libraries(test_input_utils PRIVATE input_utils unity)
-    add_test(NAME InputUtilsUnitTests COMMAND test_input_utils)
+  # Input Utils Tests
+  add_executable(test_input_utils tests/test_input_utils.c)
+  target_link_libraries(test_input_utils PRIVATE input_utils unity)
+  add_test(NAME InputUtilsUnitTests COMMAND test_input_utils)
 
-    # FSM Integration Tests
-    add_executable(test_fsm tests/test_fsm.c)
-    # Use linker flags to force including all objects from the static library
-    if(APPLE)
-        target_link_libraries(test_fsm PRIVATE -Wl,-force_load fsm_core unity)
-    else()
-        target_link_libraries(test_fsm PRIVATE -Wl,--whole-archive fsm_core -Wl,--no-whole-archive unity)
-    endif()
-    add_test(NAME FsmIntegrationTests COMMAND test_fsm)
+  # FSM Integration Tests
+  add_executable(test_fsm tests/test_fsm.c)
+  # Use linker flags to force including all objects from the static library
+  target_link_libraries(test_fsm PRIVATE -Wl,--whole-archive fsm_core -Wl,--no-whole-archive unity)
+  add_test(NAME FsmIntegrationTests COMMAND test_fsm)
 
-    # Unified Coverage Report Target
-    find_program(LCOV_PATH lcov)
-    find_program(GENHTML_PATH genhtml)
+  # Unified Coverage Report Target
+  find_program(LCOV_PATH lcov)
+  find_program(GENHTML_PATH genhtml)
 
-    if(LCOV_PATH AND ENABLE_COVERAGE)
-        add_custom_target(coverage
-            # The '-' allows report generation even if a test fails
-            COMMAND -${CMAKE_CTEST_COMMAND} --output-on-failure
-            # Capture all data, ignore system/path/unused errors
-            COMMAND ${LCOV_PATH} --directory . --capture --output-file coverage.info --no-external --ignore-errors path,unused --base-directory ${CMAKE_SOURCE_DIR}
-            # Extract only our source code
-            COMMAND ${LCOV_PATH} --extract coverage.info "${CMAKE_SOURCE_DIR}/src/*" --output-file coverage.info --ignore-errors unused
-            # Generate HTML
-            COMMAND ${GENHTML_PATH} coverage.info --output-directory coverage_report
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-            COMMENT "Report: build/coverage_report/index.html"
-        )
-        # This target ONLY generates the HTML, it doesn't run tests
-        add_custom_target(coverage_report
-            COMMAND ${LCOV_PATH} --directory . --capture --output-file coverage.info --no-external --ignore-errors path,unused --base-directory ${CMAKE_SOURCE_DIR}
-            COMMAND ${LCOV_PATH} --extract coverage.info "${CMAKE_SOURCE_DIR}/src/*" --output-file coverage.info --ignore-errors unused
-            COMMAND ${GENHTML_PATH} coverage.info --output-directory coverage_report
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-            COMMENT "Generating HTML report from existing test data..."
-        )
-    endif()
+  if(LCOV_PATH AND ENABLE_COVERAGE)
+    add_custom_target(coverage
+        # The '-' allows report generation even if a test fails
+        COMMAND -${CMAKE_CTEST_COMMAND} --output-on-failure
+        # Capture all data, ignore system/path/unused errors
+        COMMAND ${LCOV_PATH} --directory . --capture --output-file coverage.info --no-external --ignore-errors path,unused --base-directory ${CMAKE_SOURCE_DIR}
+        # Extract only our source code
+        COMMAND ${LCOV_PATH} --extract coverage.info "${CMAKE_SOURCE_DIR}/src/*" --output-file coverage.info --ignore-errors unused
+        # Generate HTML
+        COMMAND ${GENHTML_PATH} coverage.info --output-directory coverage_report
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Report: build/coverage_report/index.html"
+    )
+    # This target ONLY generates the HTML, it doesn't run tests
+    add_custom_target(coverage_report
+        COMMAND ${LCOV_PATH} --directory . --capture --output-file coverage.info --no-external --ignore-errors path,unused --base-directory ${CMAKE_SOURCE_DIR}
+        COMMAND ${LCOV_PATH} --extract coverage.info "${CMAKE_SOURCE_DIR}/src/*" --output-file coverage.info --ignore-errors unused
+        COMMAND ${GENHTML_PATH} coverage.info --output-directory coverage_report
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Generating HTML report from existing test data..."
+    )
+  endif()
 endif()
 
 # --- 7. Doxygen Documentation ---
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
-    # This creates the 'make docs' command
-    add_custom_target(docs
-        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
-        COMMENT "Generating API documentation..."
-    )
-    if(BUILD_DOCS)
-        add_dependencies(door_security_daemon docs)
-    endif()
+  # This creates the 'make docs' command
+  add_custom_target(docs
+      COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
+      COMMENT "Generating API documentation..."
+  )
+
+  if(BUILD_DOCS)
+    add_dependencies(door_security_daemon docs)
+  endif()
 endif()
 
 # --- 8. Buildroot Installation ---
