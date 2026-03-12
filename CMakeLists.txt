@@ -16,6 +16,21 @@ function(enable_coverage_for_target target_name)
   endif()
 endfunction()
 
+macro(generate_mock header_file)
+    get_filename_component(header_name ${header_file} NAME_WE)
+
+    set(mock_out ${CMAKE_SOURCE_DIR}/tests/mocks/mocks/Mock${header_name}.c)
+
+    add_custom_command(
+        OUTPUT ${mock_out}
+        COMMAND ${CMOCK_EXECUTABLE} "${header_file}"
+        DEPENDS ${header_file}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/mocks
+        COMMENT "CMock: Generating mock for ${header_name}"
+    )
+    list(APPEND MOCK_SOURCES ${mock_out})
+endmacro()
+
 # --- 2. Standard C Settings ---
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -64,11 +79,25 @@ target_link_libraries(door_security_daemon PRIVATE keypad_parser lock_logic
 # --- 5. External Dependencies ---
 # Ensure you re-init your submodules! (git submodule update --init)
 add_subdirectory(external/Unity)
+set(UNITY_DIR ${CMAKE_SOURCE_DIR}/external/Unity)
+
+set(CMOCK_DIR ${CMAKE_SOURCE_DIR}/external/CMock)
+set(CMOCK_EXECUTABLE ruby ${CMOCK_DIR}/lib/cmock.rb)
+
+# Directory where generated mocks will live
+set(MOCK_GEN_DIR ${CMAKE_SOURCE_DIR}/tests/mocks)
+file(MAKE_DIRECTORY ${MOCK_GEN_DIR})
+
+set(TEST_UTILS ${CMAKE_SOURCE_DIR}/tests/mocks/test_utils.c)
 
 # --- 6. Testing Infrastructure ---
 if(BUILD_TESTING)
   enable_testing()
   set(ENV{CTEST_OUTPUT_ON_FAILURE} 1)
+
+  # CMock
+  generate_mock(${CMAKE_SOURCE_DIR}/include/door_sensor.h)
+  generate_mock(${CMAKE_SOURCE_DIR}/include/fsm.h)
 
   # Keypad Parser Tests
   add_executable(test_keypad_parser tests/test_keypad_parser.c)
@@ -76,8 +105,9 @@ if(BUILD_TESTING)
   add_test(NAME KeypadParserUnitTests COMMAND test_keypad_parser)
 
   # Pin Entry Tests
-  add_executable(test_pin_entry tests/test_pin_entry.c)
+  add_executable(test_pin_entry tests/test_pin_entry.c ${TEST_UTILS})
   target_link_libraries(test_pin_entry PRIVATE pin_entry unity)
+  target_include_directories(test_pin_entry PRIVATE ${CMAKE_SOURCE_DIR}/tests/mocks)
   add_test(NAME PinEntryUnitTests COMMAND test_pin_entry)
 
   # Lock Logic Tests
@@ -96,16 +126,44 @@ if(BUILD_TESTING)
   add_test(NAME InputUtilsUnitTests COMMAND test_input_utils)
 
   # FSM Integration Tests
-  add_executable(test_fsm tests/test_fsm.c)
-  # Use linker flags to force including all objects from the static library
+  # add_executable(test_fsm tests/test_fsm.c ${MOCK_SOURCES})
+  add_executable(test_fsm tests/test_fsm.c ${CMAKE_SOURCE_DIR}/tests/mocks/mocks/Mockdoor_sensor.c)
+  target_sources(test_fsm PRIVATE ${CMOCK_DIR}/src/cmock.c)
+  target_include_directories(test_fsm PRIVATE
+      ${CMAKE_SOURCE_DIR}/tests/mocks/mocks
+      ${CMOCK_DIR}/src
+      include
+  )
   target_link_libraries(test_fsm PRIVATE -Wl,--whole-archive fsm_core -Wl,--no-whole-archive unity)
   add_test(NAME FsmIntegrationTests COMMAND test_fsm)
+
+  # FSM Handlers Tests
+  add_executable(test_fsm_handlers tests/test_fsm_handlers.c
+    src/fsm_handlers.c
+    ${TEST_UTILS}
+    ${CMAKE_SOURCE_DIR}/tests/mocks/mocks/Mockdoor_sensor.c
+    ${CMAKE_SOURCE_DIR}/tests/mocks/mocks/Mockfsm.c
+  )
+  target_sources(test_fsm_handlers PRIVATE ${CMOCK_DIR}/src/cmock.c)
+  target_include_directories(test_fsm_handlers PRIVATE
+      ${CMAKE_SOURCE_DIR}/tests/mocks
+      ${CMAKE_SOURCE_DIR}/tests/mocks/mocks
+      ${CMOCK_DIR}/src
+      include
+  )
+  target_link_libraries(test_fsm_handlers PRIVATE unity)
+  add_test(NAME FsmHandlersIntegrationTests COMMAND test_fsm_handlers)
+
+  # Enable coverage for test executables
+  enable_coverage_for_target(test_fsm)
+  enable_coverage_for_target(test_fsm_handlers)
 
   # Unified Coverage Report Target
   find_program(LCOV_PATH lcov)
   find_program(GENHTML_PATH genhtml)
 
   if(LCOV_PATH AND ENABLE_COVERAGE)
+    add_compile_options(-O0 -g --coverage)
     add_custom_target(coverage
         # The '-' allows report generation even if a test fails
         COMMAND -${CMAKE_CTEST_COMMAND} --output-on-failure

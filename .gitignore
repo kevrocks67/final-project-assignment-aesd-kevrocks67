@@ -63,3 +63,6 @@ bin/*
 # Doxygen artifacts
 docs/html/
 docs/latex/
+
+# Dont include CMock mocks
+tests/mocks/mocks
