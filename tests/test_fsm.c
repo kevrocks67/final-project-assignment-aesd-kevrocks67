@@ -2,6 +2,7 @@
 #include "fsm.h"
 #include <stdint.h>
 #include "Mockdoor_sensor.h"
+#include "Mocklock.h"
 
 // Mock values for initialization
 #define MOCK_TIMER_FD 10
@@ -40,38 +41,35 @@ void test_fsm_forced_door_open_triggers_alarm(void) {
     TEST_ASSERT_EQUAL(STATE_ALARM, fsm_get_state());
 }
 
-void test_fsm_valid_pin_with_door_open_notifies(void) {
-    door_sensor_is_open_ExpectAndReturn(true);
-    door_sensor_is_open_ExpectAndReturn(true);
-    fsm_update(EVENT_PIN_VALID);
-    TEST_ASSERT_EQUAL(STATE_LOCKED, fsm_get_state());
-}
-
 void test_fsm_unlocked_door_closed_locks(void) {
     // First unlock
     door_sensor_is_open_ExpectAndReturn(false);
+    lock_set_angle_Expect(DOOR_UNLOCKED_ANGLE);
     fsm_update(EVENT_PIN_VALID);
     TEST_ASSERT_EQUAL(STATE_UNLOCKED, fsm_get_state());
 
     // Then close door
+    lock_set_angle_Expect(DOOR_LOCKED_ANGLE);
     fsm_update(EVENT_DOOR_CLOSED);
     TEST_ASSERT_EQUAL(STATE_LOCKED, fsm_get_state());
 }
 
-void test_fsm_alarm_valid_pin_silences_and_resets(void) {
+void test_fsm_alarm_valid_pin_silences_and_unlocks(void) {
     // Trigger alarm via forced door open
     fsm_update(EVENT_DOOR_OPEN);
     TEST_ASSERT_EQUAL(STATE_ALARM, fsm_get_state());
 
-    // Valid PIN should silence and reset attempts
+    // Valid PIN should silence, unlock, and reset attempts
+    lock_set_angle_Expect(DOOR_UNLOCKED_ANGLE);
     fsm_update(EVENT_PIN_VALID);
-    TEST_ASSERT_EQUAL(STATE_LOCKED, fsm_get_state());
+    TEST_ASSERT_EQUAL(STATE_UNLOCKED, fsm_get_state());
     TEST_ASSERT_EQUAL(0, fsm_get_attempts());
 }
 
 void test_fsm_unlocked_timeout_door_open_restarts_timer(void) {
     // First unlock
     door_sensor_is_open_ExpectAndReturn(false);
+    lock_set_angle_Expect(DOOR_UNLOCKED_ANGLE);
     fsm_update(EVENT_PIN_VALID);
     TEST_ASSERT_EQUAL(STATE_UNLOCKED, fsm_get_state());
 
@@ -102,9 +100,8 @@ int main(void) {
     RUN_TEST(test_fsm_initialization);
     RUN_TEST(test_fsm_invalid_pin_at_max_triggers_alarm);
     RUN_TEST(test_fsm_forced_door_open_triggers_alarm);
-    RUN_TEST(test_fsm_valid_pin_with_door_open_notifies);
     RUN_TEST(test_fsm_unlocked_door_closed_locks);
-    RUN_TEST(test_fsm_alarm_valid_pin_silences_and_resets);
+    RUN_TEST(test_fsm_alarm_valid_pin_silences_and_unlocks);
     RUN_TEST(test_fsm_unlocked_timeout_door_open_restarts_timer);
     RUN_TEST(test_fsm_ignores_invalid_event);
     RUN_TEST(test_fsm_state_to_string_conversion);

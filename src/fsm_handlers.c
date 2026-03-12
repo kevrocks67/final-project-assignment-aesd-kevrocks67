@@ -1,18 +1,17 @@
 #include "fsm_handlers.h"
 #include "fsm.h"
 #include "door_sensor.h"
+#include "lock.h"
 #include <syslog.h>
 #include <sys/timerfd.h>
 
 void do_unlock() {
-    // TODO: Command servo motor to 0° (UNLOCKED position)
-    // Coordinate with lock.c once implemented
+    lock_set_angle(DOOR_UNLOCKED_ANGLE);
     syslog(LOG_USER | LOG_INFO, "Unlocking door");
 }
 
 void do_lock() {
-    // TODO: Command servo motor to 90° (LOCKED position)
-    // Coordinate with lock.c once implemented
+    lock_set_angle(DOOR_LOCKED_ANGLE);
     syslog(LOG_USER | LOG_INFO, "Locking door");
 }
 
@@ -46,7 +45,9 @@ void do_retry_timer() {
 
 void do_silence_reset() {
     fsm_reset_attempts();
-    syslog(LOG_CRIT, "ALARM SILENCED: Valid PIN entered, resetting security state");
+    do_unlock();
+    do_retry_timer();
+    syslog(LOG_CRIT, "ALARM SILENCED: Valid PIN entered, unlocking door for user to close");
 }
 
 void do_notify_close() {

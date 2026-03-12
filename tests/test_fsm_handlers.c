@@ -1,7 +1,9 @@
+#include "lock.h"
 #include "unity.h"
 #include "fsm_handlers.h"
 #include "Mockdoor_sensor.h"
 #include "Mockfsm.h"
+#include "Mocklock.h"
 #include "test_utils.h"
 #include <stdarg.h>
 #include <unistd.h>
@@ -32,6 +34,10 @@ void test_do_inc_attempts_calls_increment_and_logs(void) {
 
 void test_do_silence_reset_resets_counters(void) {
     fsm_reset_attempts_Expect();
+    lock_set_angle_Expect(DOOR_UNLOCKED_ANGLE);
+    fsm_get_timer_fd_ExpectAndReturn(10);
+    fsm_get_unlock_timeout_CMockExpectAndReturn(__LINE__, (struct timespec){.tv_sec = 30, .tv_nsec = 0});
+    
     do_silence_reset();
 }
 
@@ -87,8 +93,16 @@ void test_guard_is_not_max_attempts_returns_false_at_limit(void) {
 
 void test_do_lock_logs_locking(void) {
     clear_log_buffer();
+    lock_set_angle_Expect(DOOR_LOCKED_ANGLE);
     do_lock();
     TEST_ASSERT_EQUAL_STRING("Locking door", last_syslog_msg);
+}
+
+void test_do_unlock_logs_locking(void) {
+    clear_log_buffer();
+    lock_set_angle_Expect(DOOR_UNLOCKED_ANGLE);
+    do_unlock();
+    TEST_ASSERT_EQUAL_STRING("Unlocking door", last_syslog_msg);
 }
 
 void test_do_trigger_alarm_logs_alarm(void) {
@@ -121,6 +135,7 @@ int main(void) {
     RUN_TEST(test_do_silence_reset_resets_counters);
     RUN_TEST(test_do_retry_timer_sets_correct_timeout);
     RUN_TEST(test_do_lock_logs_locking);
+    RUN_TEST(test_do_unlock_logs_locking);
     RUN_TEST(test_do_trigger_alarm_logs_alarm);
     RUN_TEST(test_do_notify_close_logs_notification);
     RUN_TEST(test_do_retry_timer_failure_path_logs_error);

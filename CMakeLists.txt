@@ -49,9 +49,9 @@ enable_coverage_for_target(pin_entry)
 target_include_directories(pin_entry PUBLIC include)
 target_link_libraries(pin_entry PRIVATE keypad_parser)
 
-add_library(lock_logic STATIC src/lock.c)
-enable_coverage_for_target(lock_logic)
-target_include_directories(lock_logic PUBLIC include)
+add_library(lock STATIC src/lock.c)
+enable_coverage_for_target(lock)
+target_include_directories(lock PUBLIC include)
 
 add_library(door_sensor STATIC src/door_sensor.c)
 enable_coverage_for_target(door_sensor)
@@ -69,11 +69,12 @@ add_library(fsm_core STATIC
     src/fsm_handlers.c
 )
 enable_coverage_for_target(fsm_core)
+target_link_libraries(fsm_core PUBLIC lock door_sensor)
 target_include_directories(fsm_core PUBLIC include)
 
 # --- 4. Main Application ---
 add_executable(door_security_daemon src/main.c)
-target_link_libraries(door_security_daemon PRIVATE keypad_parser lock_logic
+target_link_libraries(door_security_daemon PRIVATE keypad_parser lock
     door_sensor pin_entry input_utils fsm_core)
 
 # --- 5. External Dependencies ---
@@ -98,6 +99,7 @@ if(BUILD_TESTING)
   # CMock
   generate_mock(${CMAKE_SOURCE_DIR}/include/door_sensor.h)
   generate_mock(${CMAKE_SOURCE_DIR}/include/fsm.h)
+  generate_mock(${CMAKE_SOURCE_DIR}/include/lock.h)
 
   # Keypad Parser Tests
   add_executable(test_keypad_parser tests/test_keypad_parser.c)
@@ -111,8 +113,19 @@ if(BUILD_TESTING)
   add_test(NAME PinEntryUnitTests COMMAND test_pin_entry)
 
   # Lock Logic Tests
-  add_executable(test_lock tests/test_lock.c)
-  target_link_libraries(test_lock PRIVATE lock_logic unity)
+  add_executable(test_lock tests/test_lock.c src/lock.c ${TEST_UTILS})
+  target_include_directories(test_lock PRIVATE
+      ${CMAKE_SOURCE_DIR}/tests/mocks
+      ${CMOCK_DIR}/src
+      include
+  )
+  target_link_libraries(test_lock PRIVATE
+      unity
+      "-Wl,--wrap=open"
+      "-Wl,--wrap=write"
+      "-Wl,--wrap=close"
+      "-Wl,--wrap=usleep"
+  )
   add_test(NAME LockUnitTests COMMAND test_lock)
 
   # Door Sensor Tests
@@ -127,7 +140,9 @@ if(BUILD_TESTING)
 
   # FSM Integration Tests
   # add_executable(test_fsm tests/test_fsm.c ${MOCK_SOURCES})
-  add_executable(test_fsm tests/test_fsm.c ${CMAKE_SOURCE_DIR}/tests/mocks/mocks/Mockdoor_sensor.c)
+  add_executable(test_fsm tests/test_fsm.c
+      ${CMAKE_SOURCE_DIR}/tests/mocks/mocks/Mockdoor_sensor.c
+      ${CMAKE_SOURCE_DIR}/tests/mocks/mocks/Mocklock.c)
   target_sources(test_fsm PRIVATE ${CMOCK_DIR}/src/cmock.c)
   target_include_directories(test_fsm PRIVATE
       ${CMAKE_SOURCE_DIR}/tests/mocks/mocks
@@ -143,6 +158,7 @@ if(BUILD_TESTING)
     ${TEST_UTILS}
     ${CMAKE_SOURCE_DIR}/tests/mocks/mocks/Mockdoor_sensor.c
     ${CMAKE_SOURCE_DIR}/tests/mocks/mocks/Mockfsm.c
+    ${CMAKE_SOURCE_DIR}/tests/mocks/mocks/Mocklock.c
   )
   target_sources(test_fsm_handlers PRIVATE ${CMOCK_DIR}/src/cmock.c)
   target_include_directories(test_fsm_handlers PRIVATE
@@ -157,6 +173,7 @@ if(BUILD_TESTING)
   # Enable coverage for test executables
   enable_coverage_for_target(test_fsm)
   enable_coverage_for_target(test_fsm_handlers)
+  enable_coverage_for_target(test_lock)
 
   # Unified Coverage Report Target
   find_program(LCOV_PATH lcov)

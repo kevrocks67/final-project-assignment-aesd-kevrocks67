@@ -8,10 +8,6 @@ const Transition transition_table[] = {
         .action = do_unlock, .next = STATE_UNLOCKED
     },
     {
-        .current = STATE_LOCKED, .event = EVENT_PIN_VALID, .guard = guard_is_door_open,
-        .action = do_notify_close, .next = STATE_LOCKED
-    },
-    {
         .current = STATE_LOCKED, .event = EVENT_PIN_INVALID, .guard = guard_is_max_attempts,
         .action = do_trigger_alarm, .next = STATE_ALARM
     },
@@ -49,7 +45,7 @@ const Transition transition_table[] = {
     /* --- STATE_ALARM --- */
     {
         .current = STATE_ALARM, .event = EVENT_PIN_VALID, .guard = NULL,
-        .action = do_silence_reset, .next = STATE_LOCKED
+        .action = do_silence_reset, .next = STATE_UNLOCKED
     },
     {
         .current = STATE_ALARM, .event = EVENT_PIN_CANCEL, .guard = NULL,
