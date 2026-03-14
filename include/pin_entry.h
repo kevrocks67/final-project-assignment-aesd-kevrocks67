@@ -14,15 +14,30 @@
 #define MAX_PIN_LEN 8
 
 /**
- * @brief Processes a structured key event.
- * * Depending on the command in the KeyEvent, this function will:
- * - Append a digit to the buffer (if under the 8-character limit).
- * - Print the current buffer to the console (for debug/DoD).
- * - Print the final PIN and reset upon a SUBMIT command.
- * - Clear the buffer upon a CANCEL command.
- * * @param event The KeyEvent received from the keypad parser.
+ * @enum PinStatus
+ * @brief Represents the result of a key processing event in the PIN entry logic.
+ * * This status allows the caller (usually the main event loop) to determine
+ * if the FSM needs to be updated based on user input.
  */
-void pin_entry_process_key(KeyEvent event);
+typedef enum {
+    PIN_STATUS_IN_PROGRESS, /**< Character added, but PIN is not yet complete. */
+    PIN_STATUS_VALID,       /**< User submitted a PIN and it matched the MASTER_PIN. */
+    PIN_STATUS_INVALID,     /**< User submitted a PIN but it did not match. */
+    PIN_STATUS_CANCELLED    /**< User pressed the cancel key; buffer has been cleared. */
+} PinStatus;
+
+/**
+ * @brief Processes a raw key event and updates the internal PIN buffer.
+ * * This function manages the state of the PIN entry buffer. It appends numbers,
+ * handles cancellations, and performs a string comparison against the master PIN
+ * when a submit command is received. The buffer is automatically reset on
+ * SUBMIT or CANCEL.
+ * * @param event The raw KeyEvent received from the keypad driver/parser.
+ * @return PinStatus The resulting status of the PIN entry after this keypress.
+ * * @note This function logs attempts to syslog and handles the transition from
+ * raw hardware events to high-level logic statuses.
+ */
+PinStatus pin_entry_process_key(KeyEvent event);
 
 /**
  * @brief Retrieves the number of digits currently stored in the buffer.

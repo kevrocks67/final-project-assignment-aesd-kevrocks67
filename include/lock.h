@@ -40,11 +40,6 @@
 #define PWM_DUTY_MAX  2490000
 
 /**
- * @brief Internal helper to write to sysfs.
- */
-static bool write_sysfs(const char* path, const char* value);
-
-/**
  * @brief Initializes the PWM hardware for the servo motor.
  * * Exports the PWM channel via sysfs, sets the base period to 20ms (50Hz),
  * and enables the PWM output.

@@ -50,6 +50,12 @@ int fsm_init(int timer_fd, time_t timeout_sec);
 void fsm_update(Event event);
 
 /**
+ * @brief Sets the new state of the machine
+ * @note This function is really only used for testing
+ */
+void fsm_set_state(State state);
+
+/**
  * @brief Retrieves the current state of the machine.
  * @return The current @ref State.
  */

@@ -22,7 +22,8 @@ void simulate_keypresses(const int* digits, int count) {
             .cmd = KEY_CMD_NUMBER,
             .data.key_number = digits[i]
         };
-        pin_entry_process_key(ev);
+        PinStatus status = pin_entry_process_key(ev);
+        TEST_ASSERT_EQUAL_INT(PIN_STATUS_IN_PROGRESS, status);
     }
 }
 
@@ -62,8 +63,9 @@ void test_PinEntry_CancelClearsBuffer(void) {
     TEST_ASSERT_EQUAL_INT(3, pin_entry_get_count());
 
     KeyEvent cancel_ev = { .cmd = KEY_CMD_CANCEL };
-    pin_entry_process_key(cancel_ev);
+    PinStatus status = pin_entry_process_key(cancel_ev);
 
+    TEST_ASSERT_EQUAL_INT(PIN_STATUS_CANCELLED, status);
     TEST_ASSERT_EQUAL_INT(0, pin_entry_get_count());
 }
 
@@ -80,7 +82,8 @@ void test_PinEntry_SubmitResetsBuffer(void) {
 
 void test_PinEntry_IgnoreNoneCommand(void) {
     KeyEvent none_ev = { .cmd = KEY_CMD_NONE };
-    pin_entry_process_key(none_ev);
+    PinStatus status = pin_entry_process_key(none_ev);
+    TEST_ASSERT_EQUAL_INT(PIN_STATUS_IN_PROGRESS, status);
 
     TEST_ASSERT_EQUAL_INT(0, pin_entry_get_count());
 }
@@ -90,10 +93,10 @@ void test_PinEntry_InvalidPin(void) {
     simulate_keypresses(digits, 4);
 
     KeyEvent submit_ev = { .cmd = KEY_CMD_SUBMIT };
-    pin_entry_process_key(submit_ev);
+    PinStatus status = pin_entry_process_key(submit_ev);
 
+    TEST_ASSERT_EQUAL_INT(PIN_STATUS_INVALID, status);
     TEST_ASSERT_EQUAL_STRING("Pin is incorrect", last_syslog_msg);
-
 }
 
 void test_PinEntry_ValidPin(void) {
@@ -101,10 +104,10 @@ void test_PinEntry_ValidPin(void) {
     simulate_keypresses(digits, 4);
 
     KeyEvent submit_ev = { .cmd = KEY_CMD_SUBMIT };
-    pin_entry_process_key(submit_ev);
+    PinStatus status = pin_entry_process_key(submit_ev);
 
+    TEST_ASSERT_EQUAL_INT(PIN_STATUS_VALID, status);
     TEST_ASSERT_EQUAL_STRING("Pin is correct, unlocking door", last_syslog_msg);
-
 }
 
 int main(void) {

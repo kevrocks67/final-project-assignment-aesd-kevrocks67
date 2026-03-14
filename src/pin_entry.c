@@ -1,6 +1,7 @@
 #include "pin_entry.h"
 #include <string.h>
 #include <sys/syslog.h>
+#include <stdbool.h>
 
 // Internal state hidden from other files (static)
 static char pin_buffer[MAX_PIN_LEN + 1];
@@ -10,7 +11,7 @@ static int current_len = 0;
 const char* MASTER_PIN = "1234";
 
 /**
- * Reset the internal buffer and index.
+ * @brief Reset the internal buffer and index.
  * Useful for both 'Cancel' and after a successful 'Submit'.
  */
 static void reset_buffer(void) {
@@ -18,16 +19,22 @@ static void reset_buffer(void) {
     current_len = 0;
 }
 
-static void check_pin() {
+/**
+ * @brief Check if the pin is valid
+ * @return bool True if pin is correct, False if its not
+ */
+static bool check_pin() {
     if(strncmp(pin_buffer, MASTER_PIN, MAX_PIN_LEN) == 0) {
         syslog(LOG_USER | LOG_INFO, "Pin is correct, unlocking door");
+        return true;
     } else {
         syslog(LOG_USER | LOG_INFO, "Pin is incorrect");
+        return false;
     }
 }
 
 
-void pin_entry_process_key(KeyEvent event) {
+PinStatus pin_entry_process_key(KeyEvent event) {
     switch (event.cmd) {
         case KEY_CMD_NUMBER:
             if (current_len < MAX_PIN_LEN) {
@@ -38,24 +45,27 @@ void pin_entry_process_key(KeyEvent event) {
             } else {
                 syslog(LOG_USER | LOG_DEBUG, "Pin buffer is full: %d/%d", current_len, MAX_PIN_LEN);
             }
-            break;
-
-        case KEY_CMD_SUBMIT:
+            return PIN_STATUS_IN_PROGRESS;
+        case KEY_CMD_SUBMIT: {
+            bool pin_is_valid = false;
             if (current_len > 0) {
                 syslog(LOG_USER | LOG_INFO, "Pin submitted: %s", pin_buffer);
-                check_pin();
+                pin_is_valid = check_pin();
             }
             reset_buffer();
-            break;
-
+            if (pin_is_valid) {
+                return PIN_STATUS_VALID;
+            } else {
+                return PIN_STATUS_INVALID;
+            }
+        }
         case KEY_CMD_CANCEL:
             syslog(LOG_USER | LOG_INFO, "Pin entry cancelled. Clearing buffer");
             reset_buffer();
-            break;
-
+            return PIN_STATUS_CANCELLED;
         default:
             // Ignore KEY_CMD_NONE or unexpected events
-            break;
+            return PIN_STATUS_IN_PROGRESS;
     }
 }
 

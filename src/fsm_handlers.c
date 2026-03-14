@@ -8,6 +8,7 @@
 void do_unlock() {
     lock_set_angle(DOOR_UNLOCKED_ANGLE);
     syslog(LOG_USER | LOG_INFO, "Unlocking door");
+    do_start_timer();
 }
 
 void do_lock() {
@@ -29,7 +30,7 @@ void do_reset_buffer() {
     // This is a no-op in the FSM layer since PIN management belongs to the pin_entry module.
 }
 
-void do_retry_timer() {
+void do_start_timer() {
     int timer_fd = fsm_get_timer_fd();
     struct itimerspec spec = {
         .it_interval = {0, 0},
@@ -37,10 +38,14 @@ void do_retry_timer() {
     };
 
     if (timerfd_settime(timer_fd, 0, &spec, NULL) == -1) {
-        syslog(LOG_ERR, "Failed to restart unlock timer");
+        syslog(LOG_ERR, "Failed to start unlock timer");
     } else {
-        syslog(LOG_USER | LOG_DEBUG, "Unlock timer restarted");
+        syslog(LOG_USER | LOG_DEBUG, "Unlock timer started");
     }
+}
+
+void do_retry_timer() {
+    do_start_timer();
 }
 
 void do_silence_reset() {

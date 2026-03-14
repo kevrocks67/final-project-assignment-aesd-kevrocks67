@@ -36,6 +36,11 @@ void do_inc_attempts(void);
 void do_reset_buffer(void);
 
 /**
+ * @brief Start the software auto-lock timer.
+ */
+void do_start_timer(void);
+
+/**
  * @brief Restarts the software auto-lock timer.
  */
 void do_retry_timer(void);

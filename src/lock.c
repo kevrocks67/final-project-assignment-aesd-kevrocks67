@@ -39,14 +39,14 @@ bool lock_init() {
     }
 
     // Set initial state to locked
-    int initial_duty = angle_to_duty_cycle_ns(0);
+    int initial_duty = angle_to_duty_cycle_ns(DOOR_UNLOCKED_ANGLE);
     snprintf(buf, sizeof(buf), "%d", initial_duty);
     write_sysfs(PWM_SUB_PATH "/duty_cycle", buf);
 
     // Enable the PWM device
     write_sysfs(PWM_SUB_PATH "/enable", "1");
 
-    current_angle = 0;
+    current_angle = DOOR_UNLOCKED_ANGLE;
     syslog(LOG_INFO, "Lock: ehrpwm1 initialized successfully");
     return true;
 }

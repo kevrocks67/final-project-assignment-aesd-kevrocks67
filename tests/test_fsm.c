@@ -11,13 +11,19 @@
 void setUp(void) {
     // Reset the singleton state before every test
     fsm_init(MOCK_TIMER_FD, MOCK_TIMEOUT_SEC);
+    Mockdoor_sensor_Init();
+    Mocklock_Init();
 }
 
 void tearDown(void) {
+    Mockdoor_sensor_Verify();
+    Mocklock_Verify();
+    Mockdoor_sensor_Destroy();
+    Mocklock_Destroy();
 }
 
 void test_fsm_initialization(void) {
-    TEST_ASSERT_EQUAL(STATE_LOCKED, fsm_get_state());
+    TEST_ASSERT_EQUAL(STATE_UNLOCKED, fsm_get_state());
     TEST_ASSERT_EQUAL(MOCK_TIMER_FD, fsm_get_timer_fd());
     struct timespec timeout = fsm_get_unlock_timeout();
     TEST_ASSERT_EQUAL(MOCK_TIMEOUT_SEC, timeout.tv_sec);
@@ -25,6 +31,7 @@ void test_fsm_initialization(void) {
 }
 
 void test_fsm_invalid_pin_at_max_triggers_alarm(void) {
+    fsm_set_state(STATE_LOCKED);
     // Set up: two failed attempts already
     for (int i = 1; i <= MAX_ATTEMPTS; i++) {
         fsm_inc_attempts();
@@ -37,11 +44,13 @@ void test_fsm_invalid_pin_at_max_triggers_alarm(void) {
 }
 
 void test_fsm_forced_door_open_triggers_alarm(void) {
+    fsm_set_state(STATE_LOCKED);
     fsm_update(EVENT_DOOR_OPEN);
     TEST_ASSERT_EQUAL(STATE_ALARM, fsm_get_state());
 }
 
 void test_fsm_unlocked_door_closed_locks(void) {
+    fsm_set_state(STATE_LOCKED);
     // First unlock
     door_sensor_is_open_ExpectAndReturn(false);
     lock_set_angle_Expect(DOOR_UNLOCKED_ANGLE);
@@ -55,6 +64,7 @@ void test_fsm_unlocked_door_closed_locks(void) {
 }
 
 void test_fsm_alarm_valid_pin_silences_and_unlocks(void) {
+    fsm_set_state(STATE_LOCKED);
     // Trigger alarm via forced door open
     fsm_update(EVENT_DOOR_OPEN);
     TEST_ASSERT_EQUAL(STATE_ALARM, fsm_get_state());
@@ -67,6 +77,7 @@ void test_fsm_alarm_valid_pin_silences_and_unlocks(void) {
 }
 
 void test_fsm_unlocked_timeout_door_open_restarts_timer(void) {
+    fsm_set_state(STATE_LOCKED);
     // First unlock
     door_sensor_is_open_ExpectAndReturn(false);
     lock_set_angle_Expect(DOOR_UNLOCKED_ANGLE);
@@ -74,7 +85,7 @@ void test_fsm_unlocked_timeout_door_open_restarts_timer(void) {
     TEST_ASSERT_EQUAL(STATE_UNLOCKED, fsm_get_state());
 
     // Timeout with door still open should stay unlocked (and call do_retry_timer)
-    // Have to mock this function twice since its called twice when going through
+    // Have to mock door_sensor twice since it's called twice when going through
     // the transition table
     door_sensor_is_open_ExpectAndReturn(true);
     door_sensor_is_open_ExpectAndReturn(true);
@@ -83,6 +94,7 @@ void test_fsm_unlocked_timeout_door_open_restarts_timer(void) {
 }
 
 void test_fsm_ignores_invalid_event(void) {
+    fsm_set_state(STATE_LOCKED);
     // Assuming PIN_CANCEL in LOCKED state doesn't change state in your table
     fsm_update(EVENT_PIN_CANCEL);
     TEST_ASSERT_EQUAL(STATE_LOCKED, fsm_get_state());

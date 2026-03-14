@@ -11,7 +11,7 @@
 /** @brief Internal tracker for the door's physical state. */
 static bool is_door_open = false;
 
-void door_sensor_process_event(struct input_event* ev) {
+void door_sensor_process_event(const struct input_event* ev) {
     if (ev == NULL) {
         return;
     }
@@ -24,9 +24,7 @@ void door_sensor_process_event(struct input_event* ev) {
             is_door_open = is_door_open_currently;
             syslog(LOG_INFO, "Door state changed to %s",
                    is_door_open ? "Opened" : "Closed");
-            // Update state machine
         }
-
     }
 }
 

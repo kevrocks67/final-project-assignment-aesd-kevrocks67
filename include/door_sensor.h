@@ -20,7 +20,7 @@
  * our boolean that tracks state
  * * @param ev Pointer to the input_event structure provided by the kernel
  */
-void door_sensor_process_event(struct input_event* ev);
+void door_sensor_process_event(const struct input_event* ev);
 
 /**
  * @brief Checks if the door is currently open.

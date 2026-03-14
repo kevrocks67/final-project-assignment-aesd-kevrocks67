@@ -2,12 +2,13 @@
 #include "fsm_table.h"
 #include <stddef.h>
 #include <stdio.h>
+#include <syslog.h>
 #include <time.h>
 
 static FSM door_security_fsm;
 
 int fsm_init(int timer_fd, time_t timeout_sec) {
-    door_security_fsm.current_state = STATE_LOCKED;
+    door_security_fsm.current_state = STATE_UNLOCKED;
     door_security_fsm.failed_attempts = 0;
     door_security_fsm.timer_fd = timer_fd;
     door_security_fsm.unlock_timeout.tv_sec = timeout_sec;
@@ -24,9 +25,8 @@ void fsm_update(Event event) {
                 if (t->action != NULL) {
                     t->action();
                 }
-                printf("Failed Attempts: %d, Current State: %d, Event: %d\n, Next State: %d\n", door_security_fsm.failed_attempts, door_security_fsm.current_state, event, t->next);
+                syslog(LOG_USER | LOG_DEBUG, "Failed Attempts: %d, Current State: %d, Event: %d\n, Next State: %d\n", door_security_fsm.failed_attempts, door_security_fsm.current_state, event, t->next);
                 door_security_fsm.current_state = t->next;
-                printf("Current State: %d, Event: %d\n", door_security_fsm.current_state, event);
                 break;
             }
         }
@@ -35,6 +35,10 @@ void fsm_update(Event event) {
 
 State fsm_get_state() {
     return door_security_fsm.current_state;
+}
+
+void fsm_set_state(State state) {
+    door_security_fsm.current_state = state;
 }
 
 int fsm_get_timer_fd() {
