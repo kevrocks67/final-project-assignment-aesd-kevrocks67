@@ -76,7 +76,7 @@ jobs:
           mkdir -p staging
           cp build/coverage_pct.txt staging/
           cp -r build/coverage_report staging/
-          cp -r build/docs staging/
+          cp -r docs staging/
 
       # 2. RELEASE BUILD: ARM Production Binary
       - name: Build Release (ARM)
