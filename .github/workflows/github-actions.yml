@@ -1,0 +1,165 @@
+---
+name: Door Security Production CI/CD
+
+on:
+  push:
+    branches: ["main"]
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+
+permissions:
+  contents: write
+  packages: write
+
+
+jobs:
+  build-env:
+    runs-on: ubuntu-latest
+    # NEW: Only run this job if the Dockerfile was modified
+    outputs:
+      docker_changed: ${{ steps.filter.outputs.docker }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Check for Dockerfile changes
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            docker:
+              - 'Dockerfile'
+
+      - name: Log in to GHCR
+        if: steps.filter.outputs.docker == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push
+        if: steps.filter.outputs.docker == 'true'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/aesd-build-env:latest
+          # Optional: Use GitHub's cache to speed up the layers
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    needs: build-env
+    container:
+      image: ghcr.io/${{ github.repository_owner }}/aesd-build-env:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      # 1. DEBUG BUILD: Coverage & Documentation
+      - name: Build Debug & Test
+        run: |
+          chmod +x build.sh
+          ./build.sh debug
+
+          mkdir -p staging
+          cp build/coverage_pct.txt staging/
+          cp -r build/coverage_report staging/
+          cp -r build/docs staging/
+
+      # 2. RELEASE BUILD: ARM Production Binary
+      - name: Build Release (ARM)
+        run: ./build.sh release
+
+      # 3. SWUPDATE: Hash Injection, Signing & Packaging
+      # - name: Generate Signed SWU
+      #   env:
+      #     PRIV_KEY: ${{ secrets.SWUPDATE_PRIVATE_KEY }}
+      #   run: |
+      #     DAEMON_HASH=$(sha256sum bin/door_security_daemon | awk '{print $1}')
+      #     INIT_HASH=$(sha256sum pkg/buildroot/S99door_security | awk '{print $1}')
+
+      #     # Inject hashes into manifest
+      #     sed -i "s/DAEMON_HASH/$DAEMON_HASH/" pkg/swupdate/sw-description
+      #     sed -i "s/INIT_HASH/$INIT_HASH/" pkg/swupdate/sw-description
+
+      #     # Sign manifest
+      #     echo "$PRIV_KEY" > swupdate-priv.pem
+      #     openssl dgst -sha256 -sign swupdate-priv.pem pkg/swupdate/sw-description > pkg/swupdate/sw-description.sig
+
+      #     # Package SWU
+      #     cd pkg/swupdate
+      #     cp ../../bin/door_security_daemon .
+      #     cp ../buildroot/S99door_security .
+      #     chmod +x S99door_security
+
+      #     printf "sw-description\nsw-description.sig\nS99door_security\ndoor_security_daemon" | cpio -ov -H crc > ../../bin/update_v1.0.swu
+
+      #     cd ../..
+      #     rm swupdate-priv.pem
+
+      # 4. GITHUB RELEASE: Upload Binaries to Release UI
+      # - name: Create GitHub Release
+      #   uses: softprops/action-gh-release@v2
+      #   if: github.ref == 'refs/heads/main'
+      #   with:
+      #     tag_name: v${{ github.run_number }}
+      #     name: Release v${{ github.run_number }}
+      #     draft: false
+      #     prerelease: false
+      #     files: |
+      #       bin/door_security_daemon
+      #       bin/update_v1.0.swu
+      #       pkg/swupdate/sw-description
+      #       pkg/buildroot/S99door_security
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 5. DEPLOY DASHBOARD: Push to gh-pages
+      - name: Deploy to gh-pages
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          git checkout -B gh-pages
+
+          # SAFETY STEP: Save the existing index.html if it exists
+          if [ -f "index.html" ]; then
+            cp index.html ../preserved_index.html
+          fi
+
+          # Wipe the branch to clean out old docs/binaries
+          git rm -rf .
+
+          # RESTORE: Put the index.html back
+          if [ -f "../preserved_index.html" ]; then
+            cp ../preserved_index.html ./index.html
+          fi
+
+          # Restore Staged Assets
+          cp staging/coverage_pct.txt .
+          cp -r staging/coverage_report ./coverage
+          mkdir -p docs
+          cp -r staging/docs/html/* ./docs/
+          cp -r staging/docs/latex ./latex_src
+
+          # Badge JSON for Shields.io
+          COVERAGE_PCT=$(cat coverage_pct.txt)
+          echo "{\"schemaVersion\": 1, \"label\": \"coverage\", \"message\": \"$COVERAGE_PCT%\", \"color\": \"green\"}" > coverage-badge.json
+
+          # Keep a copy of release files on the web server
+          # mkdir -p releases
+          # cp bin/update_v1.0.swu releases/
+
+          git add .
+          git commit -m "🚀 CI: Deploy Assets & Coverage $COVERAGE_PCT%" || echo "No changes"
+          git push origin gh-pages --force

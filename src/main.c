@@ -176,7 +176,9 @@ static void dispatch_event(int fd, DaemonContext* ctx, int* running) {
         *running = 0;
     } else if (fd == ctx->timer_fd) {
         uint64_t expirations;
-        read(ctx->timer_fd, &expirations, sizeof(expirations));
+        if (read(ctx->timer_fd, &expirations, sizeof(expirations)) < 0) {
+            syslog(LOG_ERR, "Failed to read timerfd: %m");
+        }
         fsm_update(EVENT_TIMEOUT);
     } else if (fd ==ctx->door_sensor_fd) {
         struct input_event ev;
