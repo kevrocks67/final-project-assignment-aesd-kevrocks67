@@ -1,0 +1,95 @@
+\doxysection{src/door\+\_\+sensor.c File Reference}
+\hypertarget{door__sensor_8c}{}\label{door__sensor_8c}\index{src/door\_sensor.c@{src/door\_sensor.c}}
+
+
+Implementation of the magnetic sensor watcher logic.  
+
+
+{\ttfamily \#include "{}door\+\_\+sensor.\+h"{}}\newline
+{\ttfamily \#include $<$sys/syslog.\+h$>$}\newline
+{\ttfamily \#include $<$stddef.\+h$>$}\newline
+Include dependency graph for door\+\_\+sensor.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{door__sensor_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{door__sensor_8c_a81870f7d2c8da6b6db068e0b62a85ded}{door\+\_\+sensor\+\_\+process\+\_\+event}} (const struct input\+\_\+event \texorpdfstring{$\ast$}{*}ev)
+\begin{DoxyCompactList}\small\item\em Processes a raw Linux input event. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{door__sensor_8c_a5b4522cb803efaca774f387fd659e9c3}{door\+\_\+sensor\+\_\+is\+\_\+open}} ()
+\begin{DoxyCompactList}\small\item\em Checks if the door is currently open. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{door__sensor_8c_ae577c8512f8ff76ddc76d06ac2965c2a}{door\+\_\+sensor\+\_\+reset}} ()
+\begin{DoxyCompactList}\small\item\em Forcefully resets the internal sensor state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementation of the magnetic sensor watcher logic. 
+
+
+\begin{DoxyItemize}
+\item Handles state transitions and provides hooks for state machine integration. 
+\end{DoxyItemize}
+
+\doxysubsection{Function Documentation}
+\Hypertarget{door__sensor_8c_a5b4522cb803efaca774f387fd659e9c3}\label{door__sensor_8c_a5b4522cb803efaca774f387fd659e9c3} 
+\index{door\_sensor.c@{door\_sensor.c}!door\_sensor\_is\_open@{door\_sensor\_is\_open}}
+\index{door\_sensor\_is\_open@{door\_sensor\_is\_open}!door\_sensor.c@{door\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{door\_sensor\_is\_open()}{door\_sensor\_is\_open()}}
+{\footnotesize\ttfamily bool door\+\_\+sensor\+\_\+is\+\_\+open (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Checks if the door is currently open. 
+
+
+\begin{DoxyItemize}
+\item \begin{DoxyReturn}{Returns}
+true if the magnet is removed (door open). 
+
+false if the magnet is present (door closed). 
+\end{DoxyReturn}
+
+\end{DoxyItemize}Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{door__sensor_8c_a5b4522cb803efaca774f387fd659e9c3_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{door__sensor_8c_a81870f7d2c8da6b6db068e0b62a85ded}\label{door__sensor_8c_a81870f7d2c8da6b6db068e0b62a85ded} 
+\index{door\_sensor.c@{door\_sensor.c}!door\_sensor\_process\_event@{door\_sensor\_process\_event}}
+\index{door\_sensor\_process\_event@{door\_sensor\_process\_event}!door\_sensor.c@{door\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{door\_sensor\_process\_event()}{door\_sensor\_process\_event()}}
+{\footnotesize\ttfamily void door\+\_\+sensor\+\_\+process\+\_\+event (\begin{DoxyParamCaption}\item[{const struct input\+\_\+event \texorpdfstring{$\ast$}{*}}]{ev }\end{DoxyParamCaption})}
+
+
+
+Processes a raw Linux input event. 
+
+
+\begin{DoxyItemize}
+\item Maps EV\+\_\+\+KEY events from the magnetic switch (code 256) to the our boolean that tracks state
+\item 
+\begin{DoxyParams}{Parameters}
+{\em ev} & Pointer to the input\+\_\+event structure provided by the kernel \\
+\hline
+\end{DoxyParams}
+
+\end{DoxyItemize}\Hypertarget{door__sensor_8c_ae577c8512f8ff76ddc76d06ac2965c2a}\label{door__sensor_8c_ae577c8512f8ff76ddc76d06ac2965c2a} 
+\index{door\_sensor.c@{door\_sensor.c}!door\_sensor\_reset@{door\_sensor\_reset}}
+\index{door\_sensor\_reset@{door\_sensor\_reset}!door\_sensor.c@{door\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{door\_sensor\_reset()}{door\_sensor\_reset()}}
+{\footnotesize\ttfamily void door\+\_\+sensor\+\_\+reset (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Forcefully resets the internal sensor state. 
+
+
+\begin{DoxyItemize}
+\item Really only useful for testing 
+\end{DoxyItemize}

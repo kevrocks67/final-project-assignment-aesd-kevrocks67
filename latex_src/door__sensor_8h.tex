@@ -1,0 +1,110 @@
+\doxysection{include/door\+\_\+sensor.h File Reference}
+\hypertarget{door__sensor_8h}{}\label{door__sensor_8h}\index{include/door\_sensor.h@{include/door\_sensor.h}}
+
+
+Interface for the magnetic contact switch attached to the door.  
+
+
+{\ttfamily \#include $<$linux/input.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for door\+\_\+sensor.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=238pt]{door__sensor_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=266pt]{door__sensor_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{door__sensor_8h_aa2f39ed7eb7927d5aa4f01c52a15431b}\label{door__sensor_8h_aa2f39ed7eb7927d5aa4f01c52a15431b} 
+\#define {\bfseries DOOR\+\_\+\+OPEN}~0
+\item 
+\Hypertarget{door__sensor_8h_a36adf4f61d3a9f8c20c54e47e0547792}\label{door__sensor_8h_a36adf4f61d3a9f8c20c54e47e0547792} 
+\#define {\bfseries DOOR\+\_\+\+CLOSED}~1
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{door__sensor_8h_a81870f7d2c8da6b6db068e0b62a85ded}{door\+\_\+sensor\+\_\+process\+\_\+event}} (const struct input\+\_\+event \texorpdfstring{$\ast$}{*}ev)
+\begin{DoxyCompactList}\small\item\em Processes a raw Linux input event. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{door__sensor_8h_a87f217deba834a45daee405a4a873120}{door\+\_\+sensor\+\_\+is\+\_\+open}} (void)
+\begin{DoxyCompactList}\small\item\em Checks if the door is currently open. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{door__sensor_8h_a838fd2fee49f14cb37659d8dc434dfca}{door\+\_\+sensor\+\_\+reset}} (void)
+\begin{DoxyCompactList}\small\item\em Forcefully resets the internal sensor state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Interface for the magnetic contact switch attached to the door. 
+
+
+\begin{DoxyItemize}
+\item This module interprets raw Linux input events from the gpio-\/keys driver and maintains the logical state (Open/\+Closed) of the door. 
+\end{DoxyItemize}
+
+\doxysubsection{Function Documentation}
+\Hypertarget{door__sensor_8h_a87f217deba834a45daee405a4a873120}\label{door__sensor_8h_a87f217deba834a45daee405a4a873120} 
+\index{door\_sensor.h@{door\_sensor.h}!door\_sensor\_is\_open@{door\_sensor\_is\_open}}
+\index{door\_sensor\_is\_open@{door\_sensor\_is\_open}!door\_sensor.h@{door\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{door\_sensor\_is\_open()}{door\_sensor\_is\_open()}}
+{\footnotesize\ttfamily bool door\+\_\+sensor\+\_\+is\+\_\+open (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Checks if the door is currently open. 
+
+
+\begin{DoxyItemize}
+\item \begin{DoxyReturn}{Returns}
+true if the magnet is removed (door open). 
+
+false if the magnet is present (door closed). 
+\end{DoxyReturn}
+
+\end{DoxyItemize}Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{door__sensor_8h_a87f217deba834a45daee405a4a873120_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{door__sensor_8h_a81870f7d2c8da6b6db068e0b62a85ded}\label{door__sensor_8h_a81870f7d2c8da6b6db068e0b62a85ded} 
+\index{door\_sensor.h@{door\_sensor.h}!door\_sensor\_process\_event@{door\_sensor\_process\_event}}
+\index{door\_sensor\_process\_event@{door\_sensor\_process\_event}!door\_sensor.h@{door\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{door\_sensor\_process\_event()}{door\_sensor\_process\_event()}}
+{\footnotesize\ttfamily void door\+\_\+sensor\+\_\+process\+\_\+event (\begin{DoxyParamCaption}\item[{const struct input\+\_\+event \texorpdfstring{$\ast$}{*}}]{ev }\end{DoxyParamCaption})}
+
+
+
+Processes a raw Linux input event. 
+
+
+\begin{DoxyItemize}
+\item Maps EV\+\_\+\+KEY events from the magnetic switch (code 256) to the our boolean that tracks state
+\item 
+\begin{DoxyParams}{Parameters}
+{\em ev} & Pointer to the input\+\_\+event structure provided by the kernel \\
+\hline
+\end{DoxyParams}
+
+\end{DoxyItemize}\Hypertarget{door__sensor_8h_a838fd2fee49f14cb37659d8dc434dfca}\label{door__sensor_8h_a838fd2fee49f14cb37659d8dc434dfca} 
+\index{door\_sensor.h@{door\_sensor.h}!door\_sensor\_reset@{door\_sensor\_reset}}
+\index{door\_sensor\_reset@{door\_sensor\_reset}!door\_sensor.h@{door\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{door\_sensor\_reset()}{door\_sensor\_reset()}}
+{\footnotesize\ttfamily void door\+\_\+sensor\+\_\+reset (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Forcefully resets the internal sensor state. 
+
+
+\begin{DoxyItemize}
+\item Really only useful for testing 
+\end{DoxyItemize}

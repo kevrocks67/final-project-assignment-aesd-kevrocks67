@@ -1,0 +1,191 @@
+\doxysection{include/fsm.h File Reference}
+\hypertarget{fsm_8h}{}\label{fsm_8h}\index{include/fsm.h@{include/fsm.h}}
+
+
+Finite State Machine for the Door Security System.  
+
+
+{\ttfamily \#include "{}fsm\+\_\+types.\+h"{}}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+Include dependency graph for fsm.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=295pt]{fsm_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=163pt]{fsm_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structFSM}{FSM}}
+\begin{DoxyCompactList}\small\item\em Persistent context for the security state machine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{fsm_8h_ae4209f4ae7b34bee429f16211831e247}{fsm\+\_\+init}} (int timer\+\_\+fd, time\+\_\+t timeout\+\_\+sec)
+\begin{DoxyCompactList}\small\item\em Initializes the \doxylink{structFSM}{FSM} context. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fsm_8h_a07e5d014fbecf19b16ca8f969375c8f5}{fsm\+\_\+update}} (\mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3}{Event}} event)
+\begin{DoxyCompactList}\small\item\em The event processor for the \doxylink{structFSM}{FSM}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{fsm_8h_a38fc0e73668e1b0844c988ada5a23e88}{fsm\+\_\+set\+\_\+state}} (\mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}} state)
+\begin{DoxyCompactList}\small\item\em Sets the new state of the machine. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}} \mbox{\hyperlink{fsm_8h_a45019b89feb2550510fc6ce317c756db}{fsm\+\_\+get\+\_\+state}} (void)
+\begin{DoxyCompactList}\small\item\em Retrieves the current state of the machine. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{fsm_8h_a4f3b2670ca146b2ab245da040ce74338}{fsm\+\_\+get\+\_\+timer\+\_\+fd}} (void)
+\begin{DoxyCompactList}\small\item\em Retrieves the timer file descriptor. \end{DoxyCompactList}\item 
+struct timespec \mbox{\hyperlink{fsm_8h_a0b36649056b3b72ed8122194fd736abd}{fsm\+\_\+get\+\_\+unlock\+\_\+timeout}} (void)
+\begin{DoxyCompactList}\small\item\em Retrieves the configured timeout duration. \end{DoxyCompactList}\item 
+const int \mbox{\hyperlink{fsm_8h_a85386966799fe721d9a0cfdb413e89d3}{fsm\+\_\+get\+\_\+attempts}} (void)
+\begin{DoxyCompactList}\small\item\em Retrieves the number of failed attempts. \end{DoxyCompactList}\item 
+\Hypertarget{fsm_8h_a6319f09b088bb379eb01fada249884e4}\label{fsm_8h_a6319f09b088bb379eb01fada249884e4} 
+void {\bfseries fsm\+\_\+inc\+\_\+attempts} (void)
+\begin{DoxyCompactList}\small\item\em Increases the number of Pin Entry failed attempts by 1. \end{DoxyCompactList}\item 
+\Hypertarget{fsm_8h_ac84f110023ad9a326c4cc6692be30f10}\label{fsm_8h_ac84f110023ad9a326c4cc6692be30f10} 
+void {\bfseries fsm\+\_\+reset\+\_\+attempts} (void)
+\begin{DoxyCompactList}\small\item\em Resets the number of Pin Entry failed attempts to 0. \end{DoxyCompactList}\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{fsm_8h_aef47237a9e5215e073783ddd4de60580}{fsm\+\_\+state\+\_\+to\+\_\+string}} (int state)
+\begin{DoxyCompactList}\small\item\em Converts a state to a human-\/readable string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Finite State Machine for the Door Security System. 
+
+
+\begin{DoxyItemize}
+\item This module implements a Mealy machine that coordinates the Keypad PIN entry, the Servo lock, and the Magnetic Door Sensor. 
+\end{DoxyItemize}
+
+\doxysubsection{Function Documentation}
+\Hypertarget{fsm_8h_a85386966799fe721d9a0cfdb413e89d3}\label{fsm_8h_a85386966799fe721d9a0cfdb413e89d3} 
+\index{fsm.h@{fsm.h}!fsm\_get\_attempts@{fsm\_get\_attempts}}
+\index{fsm\_get\_attempts@{fsm\_get\_attempts}!fsm.h@{fsm.h}}
+\doxysubsubsection{\texorpdfstring{fsm\_get\_attempts()}{fsm\_get\_attempts()}}
+{\footnotesize\ttfamily const int fsm\+\_\+get\+\_\+attempts (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Retrieves the number of failed attempts. 
+
+\begin{DoxyReturn}{Returns}
+The number of failed attempts 
+\end{DoxyReturn}
+\Hypertarget{fsm_8h_a45019b89feb2550510fc6ce317c756db}\label{fsm_8h_a45019b89feb2550510fc6ce317c756db} 
+\index{fsm.h@{fsm.h}!fsm\_get\_state@{fsm\_get\_state}}
+\index{fsm\_get\_state@{fsm\_get\_state}!fsm.h@{fsm.h}}
+\doxysubsubsection{\texorpdfstring{fsm\_get\_state()}{fsm\_get\_state()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}} fsm\+\_\+get\+\_\+state (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Retrieves the current state of the machine. 
+
+\begin{DoxyReturn}{Returns}
+The current \doxylink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}. 
+\end{DoxyReturn}
+\Hypertarget{fsm_8h_a4f3b2670ca146b2ab245da040ce74338}\label{fsm_8h_a4f3b2670ca146b2ab245da040ce74338} 
+\index{fsm.h@{fsm.h}!fsm\_get\_timer\_fd@{fsm\_get\_timer\_fd}}
+\index{fsm\_get\_timer\_fd@{fsm\_get\_timer\_fd}!fsm.h@{fsm.h}}
+\doxysubsubsection{\texorpdfstring{fsm\_get\_timer\_fd()}{fsm\_get\_timer\_fd()}}
+{\footnotesize\ttfamily int fsm\+\_\+get\+\_\+timer\+\_\+fd (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Retrieves the timer file descriptor. 
+
+\begin{DoxyReturn}{Returns}
+The timerfd integer. 
+\end{DoxyReturn}
+\Hypertarget{fsm_8h_a0b36649056b3b72ed8122194fd736abd}\label{fsm_8h_a0b36649056b3b72ed8122194fd736abd} 
+\index{fsm.h@{fsm.h}!fsm\_get\_unlock\_timeout@{fsm\_get\_unlock\_timeout}}
+\index{fsm\_get\_unlock\_timeout@{fsm\_get\_unlock\_timeout}!fsm.h@{fsm.h}}
+\doxysubsubsection{\texorpdfstring{fsm\_get\_unlock\_timeout()}{fsm\_get\_unlock\_timeout()}}
+{\footnotesize\ttfamily struct timespec fsm\+\_\+get\+\_\+unlock\+\_\+timeout (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Retrieves the configured timeout duration. 
+
+\begin{DoxyReturn}{Returns}
+The timeout as a struct timespec. 
+\end{DoxyReturn}
+\Hypertarget{fsm_8h_ae4209f4ae7b34bee429f16211831e247}\label{fsm_8h_ae4209f4ae7b34bee429f16211831e247} 
+\index{fsm.h@{fsm.h}!fsm\_init@{fsm\_init}}
+\index{fsm\_init@{fsm\_init}!fsm.h@{fsm.h}}
+\doxysubsubsection{\texorpdfstring{fsm\_init()}{fsm\_init()}}
+{\footnotesize\ttfamily int fsm\+\_\+init (\begin{DoxyParamCaption}\item[{int}]{timer\+\_\+fd,  }\item[{time\+\_\+t}]{timeout\+\_\+sec }\end{DoxyParamCaption})}
+
+
+
+Initializes the \doxylink{structFSM}{FSM} context. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timer\+\_\+fd} & The file descriptor for the system timer. \\
+\hline
+{\em timeout\+\_\+sec} & The default timeout duration in seconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, non-\/zero on failure.
+\begin{DoxyItemize}
+\item Sets the initial state to \doxylink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8ae334d166e18793e66d299c0266539a09}{STATE\+\_\+\+LOCKED} and resets counters. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+\Hypertarget{fsm_8h_a38fc0e73668e1b0844c988ada5a23e88}\label{fsm_8h_a38fc0e73668e1b0844c988ada5a23e88} 
+\index{fsm.h@{fsm.h}!fsm\_set\_state@{fsm\_set\_state}}
+\index{fsm\_set\_state@{fsm\_set\_state}!fsm.h@{fsm.h}}
+\doxysubsubsection{\texorpdfstring{fsm\_set\_state()}{fsm\_set\_state()}}
+{\footnotesize\ttfamily void fsm\+\_\+set\+\_\+state (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}}}]{state }\end{DoxyParamCaption})}
+
+
+
+Sets the new state of the machine. 
+
+\begin{DoxyNote}{Note}
+This function is really only used for testing 
+\end{DoxyNote}
+\Hypertarget{fsm_8h_aef47237a9e5215e073783ddd4de60580}\label{fsm_8h_aef47237a9e5215e073783ddd4de60580} 
+\index{fsm.h@{fsm.h}!fsm\_state\_to\_string@{fsm\_state\_to\_string}}
+\index{fsm\_state\_to\_string@{fsm\_state\_to\_string}!fsm.h@{fsm.h}}
+\doxysubsubsection{\texorpdfstring{fsm\_state\_to\_string()}{fsm\_state\_to\_string()}}
+{\footnotesize\ttfamily const char \texorpdfstring{$\ast$}{*} fsm\+\_\+state\+\_\+to\+\_\+string (\begin{DoxyParamCaption}\item[{int}]{state }\end{DoxyParamCaption})}
+
+
+
+Converts a state to a human-\/readable string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & The state integer to convert. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A constant string representing the state name. 
+\end{DoxyReturn}
+\Hypertarget{fsm_8h_a07e5d014fbecf19b16ca8f969375c8f5}\label{fsm_8h_a07e5d014fbecf19b16ca8f969375c8f5} 
+\index{fsm.h@{fsm.h}!fsm\_update@{fsm\_update}}
+\index{fsm\_update@{fsm\_update}!fsm.h@{fsm.h}}
+\doxysubsubsection{\texorpdfstring{fsm\_update()}{fsm\_update()}}
+{\footnotesize\ttfamily void fsm\+\_\+update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3}{Event}}}]{event }\end{DoxyParamCaption})}
+
+
+
+The event processor for the \doxylink{structFSM}{FSM}. 
+
+
+\begin{DoxyItemize}
+\item Takes an event, checks the current state based on inputs to the system, executes the required Mealy actions (outputs) and updates the state.
+\item 
+\begin{DoxyParams}{Parameters}
+{\em event} & The triggered event to process. \\
+\hline
+\end{DoxyParams}
+
+\end{DoxyItemize}

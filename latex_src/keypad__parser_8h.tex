@@ -1,0 +1,99 @@
+\doxysection{include/keypad\+\_\+parser.h File Reference}
+\hypertarget{keypad__parser_8h}{}\label{keypad__parser_8h}\index{include/keypad\_parser.h@{include/keypad\_parser.h}}
+
+
+Public API for translating Linux input events to system commands.  
+
+
+{\ttfamily \#include $<$linux/input.\+h$>$}\newline
+Include dependency graph for keypad\+\_\+parser.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{keypad__parser_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{keypad__parser_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structKeyEvent}{Key\+Event}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5}{Key\+Command}} \{ \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5af60f9f8e79700f782281e5efe9900674}{KEY\+\_\+\+CMD\+\_\+\+NONE}} = 0
+, \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a89688b8d49446f30f94952b6df4db19c}{KEY\+\_\+\+CMD\+\_\+\+NUMBER}}
+, \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a943b0cf3fd6e6f842e0797cac729eee5}{KEY\+\_\+\+CMD\+\_\+\+SUBMIT}}
+, \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a92b3678ff9fdb2e6165fc9a1264239b5}{KEY\+\_\+\+CMD\+\_\+\+CANCEL}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structKeyEvent}{Key\+Event}} \mbox{\hyperlink{keypad__parser_8h_a1d5d30f4a046fcf0524886dd9e82bbb1}{process\+\_\+keypad\+\_\+event}} (const struct input\+\_\+event \texorpdfstring{$\ast$}{*}ev)
+\begin{DoxyCompactList}\small\item\em Translates a Linux input\+\_\+event into a system-\/specific \doxylink{structKeyEvent}{Key\+Event}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Public API for translating Linux input events to system commands. 
+
+This header defines the \doxylink{structKeyEvent}{Key\+Event} structure and the parsing function used by the door security system to interpret keypad input from the Linux input subsystem. 
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5}\label{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5} 
+\index{keypad\_parser.h@{keypad\_parser.h}!KeyCommand@{KeyCommand}}
+\index{KeyCommand@{KeyCommand}!keypad\_parser.h@{keypad\_parser.h}}
+\doxysubsubsection{\texorpdfstring{KeyCommand}{KeyCommand}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5}{Key\+Command}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{KEY\_CMD\_NONE@{KEY\_CMD\_NONE}!keypad\_parser.h@{keypad\_parser.h}}\index{keypad\_parser.h@{keypad\_parser.h}!KEY\_CMD\_NONE@{KEY\_CMD\_NONE}}}\Hypertarget{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5af60f9f8e79700f782281e5efe9900674}\label{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5af60f9f8e79700f782281e5efe9900674} 
+KEY\+\_\+\+CMD\+\_\+\+NONE&No valid key press detected or event ignored. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{KEY\_CMD\_NUMBER@{KEY\_CMD\_NUMBER}!keypad\_parser.h@{keypad\_parser.h}}\index{keypad\_parser.h@{keypad\_parser.h}!KEY\_CMD\_NUMBER@{KEY\_CMD\_NUMBER}}}\Hypertarget{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a89688b8d49446f30f94952b6df4db19c}\label{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a89688b8d49446f30f94952b6df4db19c} 
+KEY\+\_\+\+CMD\+\_\+\+NUMBER&A numeric digit (0-\/9) was pressed. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{KEY\_CMD\_SUBMIT@{KEY\_CMD\_SUBMIT}!keypad\_parser.h@{keypad\_parser.h}}\index{keypad\_parser.h@{keypad\_parser.h}!KEY\_CMD\_SUBMIT@{KEY\_CMD\_SUBMIT}}}\Hypertarget{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a943b0cf3fd6e6f842e0797cac729eee5}\label{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a943b0cf3fd6e6f842e0797cac729eee5} 
+KEY\+\_\+\+CMD\+\_\+\+SUBMIT&The EOP (End Of Pin) symbol, typically the \# key. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{KEY\_CMD\_CANCEL@{KEY\_CMD\_CANCEL}!keypad\_parser.h@{keypad\_parser.h}}\index{keypad\_parser.h@{keypad\_parser.h}!KEY\_CMD\_CANCEL@{KEY\_CMD\_CANCEL}}}\Hypertarget{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a92b3678ff9fdb2e6165fc9a1264239b5}\label{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a92b3678ff9fdb2e6165fc9a1264239b5} 
+KEY\+\_\+\+CMD\+\_\+\+CANCEL&The cancellation symbol, typically the \texorpdfstring{$\ast$}{*} key. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{keypad__parser_8h_a1d5d30f4a046fcf0524886dd9e82bbb1}\label{keypad__parser_8h_a1d5d30f4a046fcf0524886dd9e82bbb1} 
+\index{keypad\_parser.h@{keypad\_parser.h}!process\_keypad\_event@{process\_keypad\_event}}
+\index{process\_keypad\_event@{process\_keypad\_event}!keypad\_parser.h@{keypad\_parser.h}}
+\doxysubsubsection{\texorpdfstring{process\_keypad\_event()}{process\_keypad\_event()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structKeyEvent}{Key\+Event}} process\+\_\+keypad\+\_\+event (\begin{DoxyParamCaption}\item[{const struct input\+\_\+event \texorpdfstring{$\ast$}{*}}]{ev }\end{DoxyParamCaption})}
+
+
+
+Translates a Linux input\+\_\+event into a system-\/specific \doxylink{structKeyEvent}{Key\+Event}. 
+
+
+\begin{DoxyItemize}
+\item Filters events based on type (EV\+\_\+\+KEY) and value (1 for press). Events that do not match these criteria, or keys not defined in the switch table, return a \doxylink{structKeyEvent}{Key\+Event} with cmd set to KEY\+\_\+\+CMD\+\_\+\+NONE.
+\item 
+\begin{DoxyParams}{Parameters}
+{\em ev} & Pointer to the raw input\+\_\+event struct read from the device. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{structKeyEvent}{Key\+Event} The translated command and associated data. 
+\end{DoxyReturn}
+
+\end{DoxyItemize}

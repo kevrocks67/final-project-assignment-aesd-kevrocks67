@@ -1,0 +1,29 @@
+\doxysection{keypad\+\_\+parser.\+h}
+\hypertarget{keypad__parser_8h_source}{}\label{keypad__parser_8h_source}\index{include/keypad\_parser.h@{include/keypad\_parser.h}}
+\mbox{\hyperlink{keypad__parser_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#ifndef\ KEYPAD\_PARSER\_H}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ KEYPAD\_PARSER\_H}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <linux/input.h>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5af60f9f8e79700f782281e5efe9900674}{KEY\_CMD\_NONE}}\ =\ 0,\ \ }
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a89688b8d49446f30f94952b6df4db19c}{KEY\_CMD\_NUMBER}},\ \ \ \ }
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a943b0cf3fd6e6f842e0797cac729eee5}{KEY\_CMD\_SUBMIT}},\ \ \ \ }
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5a92b3678ff9fdb2e6165fc9a1264239b5}{KEY\_CMD\_CANCEL}}\ \ \ \ \ }
+\DoxyCodeLine{00020\ \}\ \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5}{KeyCommand}};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5}{KeyCommand}}\ \mbox{\hyperlink{structKeyEvent_a842a7dc2bed8ad90a790d649c4e3aabf}{cmd}};\ \ \ \ \ \ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{union\ }\{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structKeyEvent_a147fe68667b94497f6d984677477fae6}{key\_number}};\ \ }
+\DoxyCodeLine{00026\ \ \ \ \ \}\ data;\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00027\ \}\ \mbox{\hyperlink{structKeyEvent}{KeyEvent}};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00037\ \mbox{\hyperlink{structKeyEvent}{KeyEvent}}\ \mbox{\hyperlink{keypad__parser_8h_a1d5d30f4a046fcf0524886dd9e82bbb1}{process\_keypad\_event}}(\textcolor{keyword}{const}\ \textcolor{keyword}{struct}\ input\_event*\ ev);}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//KEYPAD\_PARSER\_H}}
+
+\end{DoxyCode}

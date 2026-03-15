@@ -1,0 +1,39 @@
+\chapter{Door Security Daemon}
+\hypertarget{index}{}\label{index}\index{Door Security Daemon@{Door Security Daemon}}
+\label{index_md_README}%
+\Hypertarget{index_md_README}%
+   
+
+This is part of my final project for the CU Boulder Advanced Embedded Linux Development course.
+
+\mbox{[}Project Overview\mbox{]}("{}https\+://github.\+com/cu-\/ecen-\/aeld/final-\/project-\/kevrocks67/wiki/\+Project-\/\+Overview"{})
+
+The Door Security Daemon is an embedded C application designed for the Beagle\+Bone Black (BBB). It handles pin input from an adafruit 3x4 keypad and a magnetic contact switch. The "{}lock"{} is a SG90 servo. This daemon supports secure, signed OTA updates via SWUpdate.
+
+This is meant to be deployed through a buildroot image which can be found in \mbox{[}this\mbox{]}("{}https\+://github.\+com/cu-\/ecen-\/aeld/final-\/project-\/kevrocks67"{}) other repo.\hypertarget{index_autotoc_md1}{}\doxysection{\texorpdfstring{Building}{Building}}\label{index_autotoc_md1}
+
+\begin{DoxyEnumerate}
+\item Build the environment image
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{docker\ build\ -\/t\ aesd-\/build-\/env\ .}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyEnumerate}
+\item Build the software
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\#\ Dev}
+\DoxyCodeLine{docker\ run\ -\/it\ -\/-\/rm\ -\/v\ \$(pwd):/workspace\ aesd-\/build-\/env\ ./build.sh\ debug}
+\DoxyCodeLine{\#\ Release}
+\DoxyCodeLine{docker\ run\ -\/it\ -\/-\/rm\ -\/v\ \$(pwd):/workspace\ aesd-\/build-\/env\ ./build.sh\ release}
+
+\end{DoxyCode}
+ 

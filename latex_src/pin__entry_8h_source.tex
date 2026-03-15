@@ -1,0 +1,27 @@
+\doxysection{pin\+\_\+entry.\+h}
+\hypertarget{pin__entry_8h_source}{}\label{pin__entry_8h_source}\index{include/pin\_entry.h@{include/pin\_entry.h}}
+\mbox{\hyperlink{pin__entry_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#ifndef\ PIN\_ENTRY\_H}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ PIN\_ENTRY\_H}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{keypad__parser_8h}{keypad\_parser.h}}"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ MAX\_PIN\_LEN\ 8}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a9abf05d14cc1d8b0051108c77b96fb5c}{PIN\_STATUS\_IN\_PROGRESS}},\ }
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a0767639237ccecd18cacfd73bdbed94f}{PIN\_STATUS\_VALID}},\ \ \ \ \ \ \ }
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a3c319863e0d82ee8b6697cf57003a4fe}{PIN\_STATUS\_INVALID}},\ \ \ \ \ }
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668ac668974fa5ab1be2968751f003b3469d}{PIN\_STATUS\_CANCELLED}}\ \ \ \ }
+\DoxyCodeLine{00027\ \}\ \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668}{PinStatus}};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00040\ \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668}{PinStatus}}\ \mbox{\hyperlink{pin__entry_8h_a52f2b5552b92bc34e97d23d76c92a41d}{pin\_entry\_process\_key}}(\mbox{\hyperlink{structKeyEvent}{KeyEvent}}\ event);}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00048\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{pin__entry_8h_a992d79db83031c8b8ec4b3616f080ee8}{pin\_entry\_get\_count}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//PIN\_ENTRY\_H}}
+
+\end{DoxyCode}

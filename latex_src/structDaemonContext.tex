@@ -1,0 +1,66 @@
+\doxysection{Daemon\+Context Struct Reference}
+\hypertarget{structDaemonContext}{}\label{structDaemonContext}\index{DaemonContext@{DaemonContext}}
+
+
+Holds file descriptors for all system components.  
+
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{structDaemonContext_a7d4255933a99485e8aa2068106df2115}{epoll\+\_\+fd}}
+\item 
+int \mbox{\hyperlink{structDaemonContext_af2d770539b563e821787c540454ec0e2}{sig\+\_\+fd}}
+\item 
+int \mbox{\hyperlink{structDaemonContext_add290fea5be8cb9e103f73ca255cfa62}{timer\+\_\+fd}}
+\item 
+int \mbox{\hyperlink{structDaemonContext_a1ec7856413e739738532044fe2c2a59b}{keypad\+\_\+fd}}
+\item 
+int \mbox{\hyperlink{structDaemonContext_a9e8120bbbd92fb4e8e3ad268e8b69628}{door\+\_\+sensor\+\_\+fd}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Holds file descriptors for all system components. 
+
+
+\begin{DoxyItemize}
+\item This structure centralizes resources to simplify function signatures and ensure clean resource management during teardown. 
+\end{DoxyItemize}
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structDaemonContext_a9e8120bbbd92fb4e8e3ad268e8b69628}\label{structDaemonContext_a9e8120bbbd92fb4e8e3ad268e8b69628} 
+\index{DaemonContext@{DaemonContext}!door\_sensor\_fd@{door\_sensor\_fd}}
+\index{door\_sensor\_fd@{door\_sensor\_fd}!DaemonContext@{DaemonContext}}
+\doxysubsubsection{\texorpdfstring{door\_sensor\_fd}{door\_sensor\_fd}}
+{\footnotesize\ttfamily int Daemon\+Context\+::door\+\_\+sensor\+\_\+fd}
+
+Input device descriptor for the door sensor. \Hypertarget{structDaemonContext_a7d4255933a99485e8aa2068106df2115}\label{structDaemonContext_a7d4255933a99485e8aa2068106df2115} 
+\index{DaemonContext@{DaemonContext}!epoll\_fd@{epoll\_fd}}
+\index{epoll\_fd@{epoll\_fd}!DaemonContext@{DaemonContext}}
+\doxysubsubsection{\texorpdfstring{epoll\_fd}{epoll\_fd}}
+{\footnotesize\ttfamily int Daemon\+Context\+::epoll\+\_\+fd}
+
+Epoll instance file descriptor. \Hypertarget{structDaemonContext_a1ec7856413e739738532044fe2c2a59b}\label{structDaemonContext_a1ec7856413e739738532044fe2c2a59b} 
+\index{DaemonContext@{DaemonContext}!keypad\_fd@{keypad\_fd}}
+\index{keypad\_fd@{keypad\_fd}!DaemonContext@{DaemonContext}}
+\doxysubsubsection{\texorpdfstring{keypad\_fd}{keypad\_fd}}
+{\footnotesize\ttfamily int Daemon\+Context\+::keypad\+\_\+fd}
+
+Input device descriptor for the matrix keypad. \Hypertarget{structDaemonContext_af2d770539b563e821787c540454ec0e2}\label{structDaemonContext_af2d770539b563e821787c540454ec0e2} 
+\index{DaemonContext@{DaemonContext}!sig\_fd@{sig\_fd}}
+\index{sig\_fd@{sig\_fd}!DaemonContext@{DaemonContext}}
+\doxysubsubsection{\texorpdfstring{sig\_fd}{sig\_fd}}
+{\footnotesize\ttfamily int Daemon\+Context\+::sig\+\_\+fd}
+
+Signal file descriptor for SIGINT/\+SIGTERM. \Hypertarget{structDaemonContext_add290fea5be8cb9e103f73ca255cfa62}\label{structDaemonContext_add290fea5be8cb9e103f73ca255cfa62} 
+\index{DaemonContext@{DaemonContext}!timer\_fd@{timer\_fd}}
+\index{timer\_fd@{timer\_fd}!DaemonContext@{DaemonContext}}
+\doxysubsubsection{\texorpdfstring{timer\_fd}{timer\_fd}}
+{\footnotesize\ttfamily int Daemon\+Context\+::timer\+\_\+fd}
+
+Timerfd used for auto-\/relock logic. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{main_8c}{main.\+c}}\end{DoxyCompactItemize}

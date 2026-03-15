@@ -1,0 +1,87 @@
+\doxysection{include/input\+\_\+utils.h File Reference}
+\hypertarget{input__utils_8h}{}\label{input__utils_8h}\index{include/input\_utils.h@{include/input\_utils.h}}
+
+
+Utilities for discovering and identifying Linux input devices.  
+
+
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=195pt]{input__utils_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{input__utils_8h_a09b3f1d6f2f341411cf3b46a9e61b0fd}\label{input__utils_8h_a09b3f1d6f2f341411cf3b46a9e61b0fd} 
+\#define {\bfseries LINE\+\_\+\+BUFFER\+\_\+\+LEN}~256
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{input__utils_8h_a34ea4d9828c712108f794017a99ad8de}{find\+\_\+input\+\_\+event\+\_\+num}} (const char \texorpdfstring{$\ast$}{*}device\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Scans devices\+\_\+path for a specific device name. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{input__utils_8h_a37cf8987c86abdf2870af319766c7751}{input\+\_\+utils\+\_\+set\+\_\+path}} (const char \texorpdfstring{$\ast$}{*}path)
+\begin{DoxyCompactList}\small\item\em Sets a custom path for the input devices file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Utilities for discovering and identifying Linux input devices. 
+
+
+\begin{DoxyItemize}
+\item This module parses a path, /proc/bus/input/devices by default, to dynamically map device names (like "{}\+Keypad"{} or "{}\+GPIO"{}) to their corresponding /dev/input/eventX nodes. 
+\end{DoxyItemize}
+
+\doxysubsection{Function Documentation}
+\Hypertarget{input__utils_8h_a34ea4d9828c712108f794017a99ad8de}\label{input__utils_8h_a34ea4d9828c712108f794017a99ad8de} 
+\index{input\_utils.h@{input\_utils.h}!find\_input\_event\_num@{find\_input\_event\_num}}
+\index{find\_input\_event\_num@{find\_input\_event\_num}!input\_utils.h@{input\_utils.h}}
+\doxysubsubsection{\texorpdfstring{find\_input\_event\_num()}{find\_input\_event\_num()}}
+{\footnotesize\ttfamily int find\+\_\+input\+\_\+event\+\_\+num (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{device\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Scans devices\+\_\+path for a specific device name. 
+
+
+\begin{DoxyItemize}
+\item This function performs a safe, stack-\/based scan of the kernel\textquotesingle{}s input device list. It identifies the "{}event"{} handler number associated with a device whose "{}\+Name="{} field matches the provided string.
+\item 
+\begin{DoxyParams}{Parameters}
+{\em device\+\_\+name} & The substring to look for in the device Name field. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The event integer (e.\+g., 2 for /dev/input/event2) if found, otherwise returns -\/1.
+\end{DoxyReturn}
+
+\item \begin{DoxyNote}{Note}
+This function is thread-\/safe as it uses local stack buffers and standard file I/O. 
+\end{DoxyNote}
+
+\end{DoxyItemize}\Hypertarget{input__utils_8h_a37cf8987c86abdf2870af319766c7751}\label{input__utils_8h_a37cf8987c86abdf2870af319766c7751} 
+\index{input\_utils.h@{input\_utils.h}!input\_utils\_set\_path@{input\_utils\_set\_path}}
+\index{input\_utils\_set\_path@{input\_utils\_set\_path}!input\_utils.h@{input\_utils.h}}
+\doxysubsubsection{\texorpdfstring{input\_utils\_set\_path()}{input\_utils\_set\_path()}}
+{\footnotesize\ttfamily void input\+\_\+utils\+\_\+set\+\_\+path (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{path }\end{DoxyParamCaption})}
+
+
+
+Sets a custom path for the input devices file. 
+
+
+\begin{DoxyItemize}
+\item \begin{DoxyWarning}{Warning}
+This is a {\bfseries{Test-\/\+Only API}}. It is intended to be used by unit testing frameworks (like Unity) to point the parser at a mock text file instead of the live /proc filesystem.
+\end{DoxyWarning}
+
+\item 
+\begin{DoxyParams}{Parameters}
+{\em path} & The filesystem path to the mock devices file. \\
+\hline
+\end{DoxyParams}
+
+\end{DoxyItemize}

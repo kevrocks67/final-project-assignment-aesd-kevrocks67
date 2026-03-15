@@ -1,0 +1,42 @@
+\doxysection{Transition Struct Reference}
+\hypertarget{structTransition}{}\label{structTransition}\index{Transition@{Transition}}
+
+
+Defines a single row in the Finite State Machine\textquotesingle{}s transition table.  
+
+
+
+
+{\ttfamily \#include $<$fsm\+\_\+types.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structTransition_a8ce80999be18bddc33bb631d1ff5422f}\label{structTransition_a8ce80999be18bddc33bb631d1ff5422f} 
+\mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}} {\bfseries current}
+\begin{DoxyCompactList}\small\item\em The required starting state for this transition to be valid. \end{DoxyCompactList}\item 
+\Hypertarget{structTransition_a05195db9915f3e154a4397dd6c64a2f5}\label{structTransition_a05195db9915f3e154a4397dd6c64a2f5} 
+\mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3}{Event}} {\bfseries event}
+\begin{DoxyCompactList}\small\item\em The trigger that initiates the transition evaluation. \end{DoxyCompactList}\item 
+\Hypertarget{structTransition_a7e1128ed0426164f38df82ba0be53532}\label{structTransition_a7e1128ed0426164f38df82ba0be53532} 
+\mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}} {\bfseries next}
+\begin{DoxyCompactList}\small\item\em The destination state after the transition completes. \end{DoxyCompactList}\item 
+\Hypertarget{structTransition_a025bd3ab42973df87feec14bc9854c9f}\label{structTransition_a025bd3ab42973df87feec14bc9854c9f} 
+\mbox{\hyperlink{fsm__types_8h_a21ca9ade03b07df45a8f22de29a6d422}{fsm\+\_\+guard\+\_\+t}} {\bfseries guard}
+\begin{DoxyCompactList}\small\item\em Optional condition check before the transition fires. \end{DoxyCompactList}\item 
+\Hypertarget{structTransition_a1fe09b966e8518df845f5b3d2ccee721}\label{structTransition_a1fe09b966e8518df845f5b3d2ccee721} 
+\mbox{\hyperlink{fsm__types_8h_a9f4569d60ee2bbf03bbdab6f49e74eaa}{fsm\+\_\+action\+\_\+t}} {\bfseries action}
+\begin{DoxyCompactList}\small\item\em Optional side-\/effect executed during the state change. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines a single row in the Finite State Machine\textquotesingle{}s transition table. 
+
+
+\begin{DoxyItemize}
+\item Each \doxylink{structTransition}{Transition} represents a rule\+: "{}\+If the system is in @p current state and @p event occurs, check @p guard. If true, execute @p action and move to @p next state."{} 
+\end{DoxyItemize}
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{fsm__types_8h}{fsm\+\_\+types.\+h}}\end{DoxyCompactItemize}

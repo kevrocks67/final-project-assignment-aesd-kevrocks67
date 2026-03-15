@@ -1,0 +1,40 @@
+\doxysection{Key\+Event Struct Reference}
+\hypertarget{structKeyEvent}{}\label{structKeyEvent}\index{KeyEvent@{KeyEvent}}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5}{Key\+Command}} \mbox{\hyperlink{structKeyEvent_a842a7dc2bed8ad90a790d649c4e3aabf}{cmd}}
+\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>int \mbox{\hyperlink{structKeyEvent_a147fe68667b94497f6d984677477fae6}{key\_number}}\\
+\} \mbox{\hyperlink{structKeyEvent_ad620a15de6266a422b0d9ba84e5c0af4}{data}}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structKeyEvent_a842a7dc2bed8ad90a790d649c4e3aabf}\label{structKeyEvent_a842a7dc2bed8ad90a790d649c4e3aabf} 
+\index{KeyEvent@{KeyEvent}!cmd@{cmd}}
+\index{cmd@{cmd}!KeyEvent@{KeyEvent}}
+\doxysubsubsection{\texorpdfstring{cmd}{cmd}}
+{\footnotesize\ttfamily \mbox{\hyperlink{keypad__parser_8h_a9c962074801f6009c189f914f26b11d5}{Key\+Command}} Key\+Event\+::cmd}
+
+The type of command mapped from the input. \Hypertarget{structKeyEvent_ad620a15de6266a422b0d9ba84e5c0af4}\label{structKeyEvent_ad620a15de6266a422b0d9ba84e5c0af4} 
+\index{KeyEvent@{KeyEvent}!data@{data}}
+\index{data@{data}!KeyEvent@{KeyEvent}}
+\doxysubsubsection{\texorpdfstring{[union]}{[union]}}
+{\footnotesize\ttfamily union  \{ ... \}  Key\+Event\+::data}
+
+Associated data payload for the command. \Hypertarget{structKeyEvent_a147fe68667b94497f6d984677477fae6}\label{structKeyEvent_a147fe68667b94497f6d984677477fae6} 
+\index{KeyEvent@{KeyEvent}!key\_number@{key\_number}}
+\index{key\_number@{key\_number}!KeyEvent@{KeyEvent}}
+\doxysubsubsection{\texorpdfstring{key\_number}{key\_number}}
+{\footnotesize\ttfamily int Key\+Event\+::key\+\_\+number}
+
+Numeric value (0-\/9) associated with KEY\+\_\+\+CMD\+\_\+\+NUMBER. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{keypad__parser_8h}{keypad\+\_\+parser.\+h}}\end{DoxyCompactItemize}

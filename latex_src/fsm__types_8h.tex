@@ -1,0 +1,160 @@
+\doxysection{include/fsm\+\_\+types.h File Reference}
+\hypertarget{fsm__types_8h}{}\label{fsm__types_8h}\index{include/fsm\_types.h@{include/fsm\_types.h}}
+
+
+Types definitions and structures for the \doxylink{structFSM}{FSM}.  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for fsm\+\_\+types.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=195pt]{fsm__types_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{fsm__types_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structTransition}{Transition}}
+\begin{DoxyCompactList}\small\item\em Defines a single row in the Finite State Machine\textquotesingle{}s transition table. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef void(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{fsm__types_8h_a9f4569d60ee2bbf03bbdab6f49e74eaa}{fsm\+\_\+action\+\_\+t}}) (void)
+\begin{DoxyCompactList}\small\item\em Function pointer for \doxylink{structFSM}{FSM} state-\/change side effects. \end{DoxyCompactList}\item 
+typedef bool(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{fsm__types_8h_a21ca9ade03b07df45a8f22de29a6d422}{fsm\+\_\+guard\+\_\+t}}) (void)
+\begin{DoxyCompactList}\small\item\em Function pointer for \doxylink{structFSM}{FSM} transition logic gates. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}} \{ \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a786a8e9401b8091f65b2afbd342c90f5}{STATE\+\_\+\+UNKNOWN}} = 0
+, \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8ae334d166e18793e66d299c0266539a09}{STATE\+\_\+\+LOCKED}}
+, \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a23857280880480b48a5355ee6f6d07b1}{STATE\+\_\+\+UNLOCKED}}
+, \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a5185090945dd2750f96998be663d81a0}{STATE\+\_\+\+ALARM}}
+ \}
+\begin{DoxyCompactList}\small\item\em System security states. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3}{Event}} \{ \newline
+\mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3adc93edfd8baa5d0328141e34ace08104}{EVENT\+\_\+\+PIN\+\_\+\+VALID}} = 0
+, \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3abbe4f44a586c84c6c3526e476b969574}{EVENT\+\_\+\+PIN\+\_\+\+INVALID}}
+, \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3acbfda252b3e79be1411753e031f2ad98}{EVENT\+\_\+\+PIN\+\_\+\+CANCEL}}
+, \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3a9e0a63e0752a49e2d88d16f9c0ea1f31}{EVENT\+\_\+\+DOOR\+\_\+\+OPEN}}
+, \newline
+\mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3abb24b1d17b3d3f42ab2730064d221f8e}{EVENT\+\_\+\+DOOR\+\_\+\+CLOSED}}
+, \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3a596dc8c1b60ba4769e5f606b5d75f23c}{EVENT\+\_\+\+TIMEOUT}}
+ \}
+\begin{DoxyCompactList}\small\item\em System events that trigger state transitions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Types definitions and structures for the \doxylink{structFSM}{FSM}. 
+
+
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{fsm__types_8h_a9f4569d60ee2bbf03bbdab6f49e74eaa}\label{fsm__types_8h_a9f4569d60ee2bbf03bbdab6f49e74eaa} 
+\index{fsm\_types.h@{fsm\_types.h}!fsm\_action\_t@{fsm\_action\_t}}
+\index{fsm\_action\_t@{fsm\_action\_t}!fsm\_types.h@{fsm\_types.h}}
+\doxysubsubsection{\texorpdfstring{fsm\_action\_t}{fsm\_action\_t}}
+{\footnotesize\ttfamily typedef void(\texorpdfstring{$\ast$}{*} fsm\+\_\+action\+\_\+t) (void)}
+
+
+
+Function pointer for \doxylink{structFSM}{FSM} state-\/change side effects. 
+
+\texorpdfstring{$\ast$}{*}\begin{DoxyNote}{Note}
+Function definitions in fsm\+\_\+handlers.\+c; used for outputs 
+\end{DoxyNote}
+\Hypertarget{fsm__types_8h_a21ca9ade03b07df45a8f22de29a6d422}\label{fsm__types_8h_a21ca9ade03b07df45a8f22de29a6d422} 
+\index{fsm\_types.h@{fsm\_types.h}!fsm\_guard\_t@{fsm\_guard\_t}}
+\index{fsm\_guard\_t@{fsm\_guard\_t}!fsm\_types.h@{fsm\_types.h}}
+\doxysubsubsection{\texorpdfstring{fsm\_guard\_t}{fsm\_guard\_t}}
+{\footnotesize\ttfamily typedef bool(\texorpdfstring{$\ast$}{*} fsm\+\_\+guard\+\_\+t) (void)}
+
+
+
+Function pointer for \doxylink{structFSM}{FSM} transition logic gates. 
+
+\texorpdfstring{$\ast$}{*}\begin{DoxyReturn}{Returns}
+true if the transition criteria are met, false to stay in current state. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Implemented in fsm\+\_\+handlers.\+c to control hardware (Servo, LEDs, Buzzer). 
+\end{DoxyNote}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3}\label{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3} 
+\index{fsm\_types.h@{fsm\_types.h}!Event@{Event}}
+\index{Event@{Event}!fsm\_types.h@{fsm\_types.h}}
+\doxysubsubsection{\texorpdfstring{Event}{Event}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3}{Event}}}
+
+
+
+System events that trigger state transitions. 
+
+\begin{DoxyNote}{Note}
+These are inputs to the \doxylink{structFSM}{FSM}. Actions (like moving the servo) are outputs. 
+\end{DoxyNote}
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EVENT\_PIN\_VALID@{EVENT\_PIN\_VALID}!fsm\_types.h@{fsm\_types.h}}\index{fsm\_types.h@{fsm\_types.h}!EVENT\_PIN\_VALID@{EVENT\_PIN\_VALID}}}\Hypertarget{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3adc93edfd8baa5d0328141e34ace08104}\label{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3adc93edfd8baa5d0328141e34ace08104} 
+EVENT\+\_\+\+PIN\+\_\+\+VALID&Valid PIN entered and submitted. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EVENT\_PIN\_INVALID@{EVENT\_PIN\_INVALID}!fsm\_types.h@{fsm\_types.h}}\index{fsm\_types.h@{fsm\_types.h}!EVENT\_PIN\_INVALID@{EVENT\_PIN\_INVALID}}}\Hypertarget{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3abbe4f44a586c84c6c3526e476b969574}\label{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3abbe4f44a586c84c6c3526e476b969574} 
+EVENT\+\_\+\+PIN\+\_\+\+INVALID&Invalid PIN submitted. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EVENT\_PIN\_CANCEL@{EVENT\_PIN\_CANCEL}!fsm\_types.h@{fsm\_types.h}}\index{fsm\_types.h@{fsm\_types.h}!EVENT\_PIN\_CANCEL@{EVENT\_PIN\_CANCEL}}}\Hypertarget{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3acbfda252b3e79be1411753e031f2ad98}\label{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3acbfda252b3e79be1411753e031f2ad98} 
+EVENT\+\_\+\+PIN\+\_\+\+CANCEL&User cancelled PIN entry. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EVENT\_DOOR\_OPEN@{EVENT\_DOOR\_OPEN}!fsm\_types.h@{fsm\_types.h}}\index{fsm\_types.h@{fsm\_types.h}!EVENT\_DOOR\_OPEN@{EVENT\_DOOR\_OPEN}}}\Hypertarget{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3a9e0a63e0752a49e2d88d16f9c0ea1f31}\label{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3a9e0a63e0752a49e2d88d16f9c0ea1f31} 
+EVENT\+\_\+\+DOOR\+\_\+\+OPEN&Magnetic sensor detects door is open. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EVENT\_DOOR\_CLOSED@{EVENT\_DOOR\_CLOSED}!fsm\_types.h@{fsm\_types.h}}\index{fsm\_types.h@{fsm\_types.h}!EVENT\_DOOR\_CLOSED@{EVENT\_DOOR\_CLOSED}}}\Hypertarget{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3abb24b1d17b3d3f42ab2730064d221f8e}\label{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3abb24b1d17b3d3f42ab2730064d221f8e} 
+EVENT\+\_\+\+DOOR\+\_\+\+CLOSED&Magnetic sensor detects door is closed. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EVENT\_TIMEOUT@{EVENT\_TIMEOUT}!fsm\_types.h@{fsm\_types.h}}\index{fsm\_types.h@{fsm\_types.h}!EVENT\_TIMEOUT@{EVENT\_TIMEOUT}}}\Hypertarget{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3a596dc8c1b60ba4769e5f606b5d75f23c}\label{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3a596dc8c1b60ba4769e5f606b5d75f23c} 
+EVENT\+\_\+\+TIMEOUT&Relock timer has expired. \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}\label{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8} 
+\index{fsm\_types.h@{fsm\_types.h}!State@{State}}
+\index{State@{State}!fsm\_types.h@{fsm\_types.h}}
+\doxysubsubsection{\texorpdfstring{State}{State}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}}}
+
+
+
+System security states. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_UNKNOWN@{STATE\_UNKNOWN}!fsm\_types.h@{fsm\_types.h}}\index{fsm\_types.h@{fsm\_types.h}!STATE\_UNKNOWN@{STATE\_UNKNOWN}}}\Hypertarget{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a786a8e9401b8091f65b2afbd342c90f5}\label{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a786a8e9401b8091f65b2afbd342c90f5} 
+STATE\+\_\+\+UNKNOWN&State is unknown. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_LOCKED@{STATE\_LOCKED}!fsm\_types.h@{fsm\_types.h}}\index{fsm\_types.h@{fsm\_types.h}!STATE\_LOCKED@{STATE\_LOCKED}}}\Hypertarget{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8ae334d166e18793e66d299c0266539a09}\label{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8ae334d166e18793e66d299c0266539a09} 
+STATE\+\_\+\+LOCKED&Door is secured; Servo at 90 degrees. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_UNLOCKED@{STATE\_UNLOCKED}!fsm\_types.h@{fsm\_types.h}}\index{fsm\_types.h@{fsm\_types.h}!STATE\_UNLOCKED@{STATE\_UNLOCKED}}}\Hypertarget{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a23857280880480b48a5355ee6f6d07b1}\label{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a23857280880480b48a5355ee6f6d07b1} 
+STATE\+\_\+\+UNLOCKED&Access granted; Servo at 0 degrees. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_ALARM@{STATE\_ALARM}!fsm\_types.h@{fsm\_types.h}}\index{fsm\_types.h@{fsm\_types.h}!STATE\_ALARM@{STATE\_ALARM}}}\Hypertarget{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a5185090945dd2750f96998be663d81a0}\label{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a5185090945dd2750f96998be663d81a0} 
+STATE\+\_\+\+ALARM&Security breach detected; Door forced open \\
+\hline
+
+\end{DoxyEnumFields}

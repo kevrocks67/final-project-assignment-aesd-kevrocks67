@@ -1,0 +1,56 @@
+\doxysection{src/keypad\+\_\+parser.c File Reference}
+\hypertarget{keypad__parser_8c}{}\label{keypad__parser_8c}\index{src/keypad\_parser.c@{src/keypad\_parser.c}}
+
+
+Implementation details for the keypad translation logic.  
+
+
+{\ttfamily \#include "{}keypad\+\_\+parser.\+h"{}}\newline
+{\ttfamily \#include $<$linux/input.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+Include dependency graph for keypad\+\_\+parser.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=286pt]{keypad__parser_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structKeyEvent}{Key\+Event}} \mbox{\hyperlink{keypad__parser_8c_a1d5d30f4a046fcf0524886dd9e82bbb1}{process\+\_\+keypad\+\_\+event}} (const struct input\+\_\+event \texorpdfstring{$\ast$}{*}ev)
+\begin{DoxyCompactList}\small\item\em Translates a Linux input\+\_\+event into a system-\/specific \doxylink{structKeyEvent}{Key\+Event}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementation details for the keypad translation logic. 
+
+\begin{DoxyNote}{Note}
+This implementation specifically filters for EV\+\_\+\+KEY and value 1. Release events (value 0) are explicitly ignored to prevent double-\/triggering on mechanical key bounces. 
+\end{DoxyNote}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{keypad__parser_8c_a1d5d30f4a046fcf0524886dd9e82bbb1}\label{keypad__parser_8c_a1d5d30f4a046fcf0524886dd9e82bbb1} 
+\index{keypad\_parser.c@{keypad\_parser.c}!process\_keypad\_event@{process\_keypad\_event}}
+\index{process\_keypad\_event@{process\_keypad\_event}!keypad\_parser.c@{keypad\_parser.c}}
+\doxysubsubsection{\texorpdfstring{process\_keypad\_event()}{process\_keypad\_event()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structKeyEvent}{Key\+Event}} process\+\_\+keypad\+\_\+event (\begin{DoxyParamCaption}\item[{const struct input\+\_\+event \texorpdfstring{$\ast$}{*}}]{ev }\end{DoxyParamCaption})}
+
+
+
+Translates a Linux input\+\_\+event into a system-\/specific \doxylink{structKeyEvent}{Key\+Event}. 
+
+
+\begin{DoxyItemize}
+\item Filters events based on type (EV\+\_\+\+KEY) and value (1 for press). Events that do not match these criteria, or keys not defined in the switch table, return a \doxylink{structKeyEvent}{Key\+Event} with cmd set to KEY\+\_\+\+CMD\+\_\+\+NONE.
+\item 
+\begin{DoxyParams}{Parameters}
+{\em ev} & Pointer to the raw input\+\_\+event struct read from the device. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{structKeyEvent}{Key\+Event} The translated command and associated data. 
+\end{DoxyReturn}
+
+\end{DoxyItemize}

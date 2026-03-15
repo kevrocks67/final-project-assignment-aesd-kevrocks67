@@ -1,0 +1,130 @@
+\doxysection{include/fsm\+\_\+handlers.h File Reference}
+\hypertarget{fsm__handlers_8h}{}\label{fsm__handlers_8h}\index{include/fsm\_handlers.h@{include/fsm\_handlers.h}}
+
+
+Function prototypes for \doxylink{structFSM}{FSM} guards and actions.  
+
+
+{\ttfamily \#include "{}fsm\+\_\+types.\+h"{}}\newline
+Include dependency graph for fsm\+\_\+handlers.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=210pt]{fsm__handlers_8h__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{fsm__handlers_8h_a87e4cbb743fee458d39fa565457e06ab}\label{fsm__handlers_8h_a87e4cbb743fee458d39fa565457e06ab} 
+void {\bfseries do\+\_\+unlock} (void)
+\begin{DoxyCompactList}\small\item\em Commands the servo motor to move to the UNLOCKED position (0°). \end{DoxyCompactList}\item 
+\Hypertarget{fsm__handlers_8h_a3861b90b2404ce0889caa6eaf9c330ad}\label{fsm__handlers_8h_a3861b90b2404ce0889caa6eaf9c330ad} 
+void {\bfseries do\+\_\+lock} (void)
+\begin{DoxyCompactList}\small\item\em Commands the servo motor to move to the LOCKED position (90°). \end{DoxyCompactList}\item 
+\Hypertarget{fsm__handlers_8h_a48bce56983ef12f6f7018ba5ee30680b}\label{fsm__handlers_8h_a48bce56983ef12f6f7018ba5ee30680b} 
+void {\bfseries do\+\_\+trigger\+\_\+alarm} (void)
+\begin{DoxyCompactList}\small\item\em Activates the security siren and visual alarm indicators. \end{DoxyCompactList}\item 
+\Hypertarget{fsm__handlers_8h_a4f532e69e68b0812a1adfea34ffc2c67}\label{fsm__handlers_8h_a4f532e69e68b0812a1adfea34ffc2c67} 
+void {\bfseries do\+\_\+inc\+\_\+attempts} (void)
+\begin{DoxyCompactList}\small\item\em Increments the internal counter for failed PIN entries. \end{DoxyCompactList}\item 
+\Hypertarget{fsm__handlers_8h_a5da7c4c7d18a7e3d678c8844da01a956}\label{fsm__handlers_8h_a5da7c4c7d18a7e3d678c8844da01a956} 
+void {\bfseries do\+\_\+reset\+\_\+buffer} (void)
+\begin{DoxyCompactList}\small\item\em Clears the current PIN input buffer and resets related UI elements. \end{DoxyCompactList}\item 
+\Hypertarget{fsm__handlers_8h_ae18e2e1023535a490e7a3483a6f2630f}\label{fsm__handlers_8h_ae18e2e1023535a490e7a3483a6f2630f} 
+void {\bfseries do\+\_\+start\+\_\+timer} (void)
+\begin{DoxyCompactList}\small\item\em Start the software auto-\/lock timer. \end{DoxyCompactList}\item 
+\Hypertarget{fsm__handlers_8h_a7fbe374c68917ecb399977a6d0d4c7d7}\label{fsm__handlers_8h_a7fbe374c68917ecb399977a6d0d4c7d7} 
+void {\bfseries do\+\_\+retry\+\_\+timer} (void)
+\begin{DoxyCompactList}\small\item\em Restarts the software auto-\/lock timer. \end{DoxyCompactList}\item 
+\Hypertarget{fsm__handlers_8h_add6103a19d02b89a8944631b3351940f}\label{fsm__handlers_8h_add6103a19d02b89a8944631b3351940f} 
+void {\bfseries do\+\_\+silence\+\_\+reset} (void)
+\begin{DoxyCompactList}\small\item\em Deactivates the alarm and resets the failed attempts counter to zero. \end{DoxyCompactList}\item 
+\Hypertarget{fsm__handlers_8h_ac6f2726398d15fb4a7c5136ad6c86ba7}\label{fsm__handlers_8h_ac6f2726398d15fb4a7c5136ad6c86ba7} 
+void {\bfseries do\+\_\+notify\+\_\+close} (void)
+\begin{DoxyCompactList}\small\item\em Displays a "{}\+Please Close Door"{} notification to the user. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{fsm__handlers_8h_a9e0b56fb609ebbbbc30e05e117c6866a}{guard\+\_\+is\+\_\+door\+\_\+closed}} (void)
+\begin{DoxyCompactList}\small\item\em Checks if the door is physically closed via the magnetic sensor. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{fsm__handlers_8h_a8c042a7bf4e83bf2c3200403a4d8f7c8}{guard\+\_\+is\+\_\+door\+\_\+open}} (void)
+\begin{DoxyCompactList}\small\item\em Checks if the door is physically open. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{fsm__handlers_8h_af07c2cb53d707d37de5a4834c4caf263}{guard\+\_\+is\+\_\+max\+\_\+attempts}} (void)
+\begin{DoxyCompactList}\small\item\em Determines if the consecutive failed PIN attempts have reached the limit. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{fsm__handlers_8h_a53bc6ff213006136bc4943e43f1e9da4}{guard\+\_\+is\+\_\+not\+\_\+max\+\_\+attempts}} (void)
+\begin{DoxyCompactList}\small\item\em Determines if the consecutive failed PIN attempts have reached the limit. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Function prototypes for \doxylink{structFSM}{FSM} guards and actions. 
+
+
+\begin{DoxyItemize}
+\item This header defines the "{}\+Menu"{} of available logic gates (guards) and hardware side-\/effects (actions) used by the transition table. Implementation details for these handlers are located in fsm\+\_\+handlers.\+c. 
+\end{DoxyItemize}
+
+\doxysubsection{Function Documentation}
+\Hypertarget{fsm__handlers_8h_a9e0b56fb609ebbbbc30e05e117c6866a}\label{fsm__handlers_8h_a9e0b56fb609ebbbbc30e05e117c6866a} 
+\index{fsm\_handlers.h@{fsm\_handlers.h}!guard\_is\_door\_closed@{guard\_is\_door\_closed}}
+\index{guard\_is\_door\_closed@{guard\_is\_door\_closed}!fsm\_handlers.h@{fsm\_handlers.h}}
+\doxysubsubsection{\texorpdfstring{guard\_is\_door\_closed()}{guard\_is\_door\_closed()}}
+{\footnotesize\ttfamily bool guard\+\_\+is\+\_\+door\+\_\+closed (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Checks if the door is physically closed via the magnetic sensor. 
+
+\begin{DoxyReturn}{Returns}
+true if sensor indicates CLOSED, false otherwise. 
+\end{DoxyReturn}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{fsm__handlers_8h_a9e0b56fb609ebbbbc30e05e117c6866a_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{fsm__handlers_8h_a8c042a7bf4e83bf2c3200403a4d8f7c8}\label{fsm__handlers_8h_a8c042a7bf4e83bf2c3200403a4d8f7c8} 
+\index{fsm\_handlers.h@{fsm\_handlers.h}!guard\_is\_door\_open@{guard\_is\_door\_open}}
+\index{guard\_is\_door\_open@{guard\_is\_door\_open}!fsm\_handlers.h@{fsm\_handlers.h}}
+\doxysubsubsection{\texorpdfstring{guard\_is\_door\_open()}{guard\_is\_door\_open()}}
+{\footnotesize\ttfamily bool guard\+\_\+is\+\_\+door\+\_\+open (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Checks if the door is physically open. 
+
+\begin{DoxyReturn}{Returns}
+true if sensor indicates OPEN, false otherwise. 
+\end{DoxyReturn}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=349pt]{fsm__handlers_8h_a8c042a7bf4e83bf2c3200403a4d8f7c8_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{fsm__handlers_8h_af07c2cb53d707d37de5a4834c4caf263}\label{fsm__handlers_8h_af07c2cb53d707d37de5a4834c4caf263} 
+\index{fsm\_handlers.h@{fsm\_handlers.h}!guard\_is\_max\_attempts@{guard\_is\_max\_attempts}}
+\index{guard\_is\_max\_attempts@{guard\_is\_max\_attempts}!fsm\_handlers.h@{fsm\_handlers.h}}
+\doxysubsubsection{\texorpdfstring{guard\_is\_max\_attempts()}{guard\_is\_max\_attempts()}}
+{\footnotesize\ttfamily bool guard\+\_\+is\+\_\+max\+\_\+attempts (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Determines if the consecutive failed PIN attempts have reached the limit. 
+
+\begin{DoxyReturn}{Returns}
+true if attempts \texorpdfstring{$>$}{>}= MAX\+\_\+\+ATTEMPTS, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{fsm__handlers_8h_a53bc6ff213006136bc4943e43f1e9da4}\label{fsm__handlers_8h_a53bc6ff213006136bc4943e43f1e9da4} 
+\index{fsm\_handlers.h@{fsm\_handlers.h}!guard\_is\_not\_max\_attempts@{guard\_is\_not\_max\_attempts}}
+\index{guard\_is\_not\_max\_attempts@{guard\_is\_not\_max\_attempts}!fsm\_handlers.h@{fsm\_handlers.h}}
+\doxysubsubsection{\texorpdfstring{guard\_is\_not\_max\_attempts()}{guard\_is\_not\_max\_attempts()}}
+{\footnotesize\ttfamily bool guard\+\_\+is\+\_\+not\+\_\+max\+\_\+attempts (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Determines if the consecutive failed PIN attempts have reached the limit. 
+
+\begin{DoxyReturn}{Returns}
+true if attempts \texorpdfstring{$>$}{>}= MAX\+\_\+\+ATTEMPTS, false otherwise. 
+\end{DoxyReturn}

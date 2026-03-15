@@ -1,0 +1,88 @@
+\doxysection{src/main.c File Reference}
+\hypertarget{main_8c}{}\label{main_8c}\index{src/main.c@{src/main.c}}
+
+
+Main entry point for the Door Security Daemon.  
+
+
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include $<$fcntl.\+h$>$}\newline
+{\ttfamily \#include $<$signal.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$syslog.\+h$>$}\newline
+{\ttfamily \#include $<$sys/epoll.\+h$>$}\newline
+{\ttfamily \#include $<$sys/signalfd.\+h$>$}\newline
+{\ttfamily \#include $<$sys/timerfd.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include "{}door\+\_\+sensor.\+h"{}}\newline
+{\ttfamily \#include "{}pin\+\_\+entry.\+h"{}}\newline
+{\ttfamily \#include "{}keypad\+\_\+parser.\+h"{}}\newline
+{\ttfamily \#include "{}input\+\_\+utils.\+h"{}}\newline
+{\ttfamily \#include "{}lock.\+h"{}}\newline
+{\ttfamily \#include "{}fsm.\+h"{}}\newline
+Include dependency graph for main.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{main_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structDaemonContext}{Daemon\+Context}}
+\begin{DoxyCompactList}\small\item\em Holds file descriptors for all system components. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{main_8c_ae42954bb8545d24e3e9dcde5920c9a0b}\label{main_8c_ae42954bb8545d24e3e9dcde5920c9a0b} 
+\#define {\bfseries MAX\+\_\+\+EVENTS}~10
+\begin{DoxyCompactList}\small\item\em Maximum number of events epoll can handle per wakeup. \end{DoxyCompactList}\item 
+\Hypertarget{main_8c_ad396e2f3c6ad7d32f87134c880b27472}\label{main_8c_ad396e2f3c6ad7d32f87134c880b27472} 
+\#define {\bfseries UNLOCK\+\_\+\+TIMEOUT\+\_\+\+SECS}~15
+\begin{DoxyCompactList}\small\item\em Number of seconds to wait before re-\/locking the lock. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{main_8c_ac0f2228420376f4db7e1274f2b41667c}{main}} (int argc, const char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Application entry point and event orchestration loop. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main entry point for the Door Security Daemon. 
+
+This module implements the top-\/level epoll event loop that orchestrates inputs from the keypad, door sensor, and system timers. It translates hardware interrupts and signals into \doxylink{structFSM}{FSM} events to control the door lock.
+\begin{DoxyItemize}
+\item \begin{DoxyAuthor}{Author}
+Kevin Diaz 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 2026 
+\end{DoxyDate}
+
+\end{DoxyItemize}
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8c_ac0f2228420376f4db7e1274f2b41667c}\label{main_8c_ac0f2228420376f4db7e1274f2b41667c} 
+\index{main.c@{main.c}!main@{main}}
+\index{main@{main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Application entry point and event orchestration loop. 
+
+
+\begin{DoxyItemize}
+\item Initializes hardware drivers (PWM, GPIO), sets up the \doxylink{structFSM}{FSM}, and enters a non-\/blocking epoll\+\_\+wait loop to process\+:
+\item Timer expirations (Auto-\/lock)
+\item GPIO edge triggers (Door sensor)
+\item Keypad input events (PIN entry)
+\item Linux signals (Graceful shutdown)
+\item \begin{DoxyReturn}{Returns}
+int EXIT\+\_\+\+SUCCESS on graceful shutdown, EXIT\+\_\+\+FAILURE on init error. 
+\end{DoxyReturn}
+
+\end{DoxyItemize}

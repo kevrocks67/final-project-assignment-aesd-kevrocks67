@@ -1,0 +1,39 @@
+\doxysection{FSM Struct Reference}
+\hypertarget{structFSM}{}\label{structFSM}\index{FSM@{FSM}}
+
+
+Persistent context for the security state machine.  
+
+
+
+
+{\ttfamily \#include $<$fsm.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structFSM_a774dd1623bfda75bf02cc9a0ab25b40b}\label{structFSM_a774dd1623bfda75bf02cc9a0ab25b40b} 
+\mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}} {\bfseries current\+\_\+state}
+\begin{DoxyCompactList}\small\item\em The current operational state (LOCKED, UNLOCKED, ALARM). \end{DoxyCompactList}\item 
+\Hypertarget{structFSM_ad49a98772e20f97b8cb0a3e07d806352}\label{structFSM_ad49a98772e20f97b8cb0a3e07d806352} 
+int {\bfseries failed\+\_\+attempts}
+\begin{DoxyCompactList}\small\item\em Tracks consecutive invalid PIN entries for lockout logic. \end{DoxyCompactList}\item 
+\Hypertarget{structFSM_aeb140962488fe8167e4823771db1bda9}\label{structFSM_aeb140962488fe8167e4823771db1bda9} 
+int {\bfseries timer\+\_\+fd}
+\begin{DoxyCompactList}\small\item\em The file descriptor for the Linux timerfd. \end{DoxyCompactList}\item 
+\Hypertarget{structFSM_ad2761eca900471c02c2ffba4f72348c8}\label{structFSM_ad2761eca900471c02c2ffba4f72348c8} 
+struct timespec {\bfseries unlock\+\_\+timeout}
+\begin{DoxyCompactList}\small\item\em Configurable timeout setting for automatic relock. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Persistent context for the security state machine. 
+
+
+\begin{DoxyItemize}
+\item This structure stores the "{}memory"{} of the system, including the current state, security counters, and hardware timer configurations. 
+\end{DoxyItemize}
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{fsm_8h}{fsm.\+h}}\end{DoxyCompactItemize}

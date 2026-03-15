@@ -1,0 +1,148 @@
+\doxysection{include/pin\+\_\+entry.h File Reference}
+\hypertarget{pin__entry_8h}{}\label{pin__entry_8h}\index{include/pin\_entry.h@{include/pin\_entry.h}}
+
+
+Logic for collecting and buffering keypad digits into a PIN.  
+
+
+{\ttfamily \#include "{}keypad\+\_\+parser.\+h"{}}\newline
+Include dependency graph for pin\+\_\+entry.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=188pt]{pin__entry_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=188pt]{pin__entry_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{pin__entry_8h_a5800c331c1758c17b6b910eaf4e7d926}{MAX\+\_\+\+PIN\+\_\+\+LEN}}~8
+\begin{DoxyCompactList}\small\item\em The maximum number of digits allowed for a PIN entry. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668}{Pin\+Status}} \{ \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a9abf05d14cc1d8b0051108c77b96fb5c}{PIN\+\_\+\+STATUS\+\_\+\+IN\+\_\+\+PROGRESS}}
+, \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a0767639237ccecd18cacfd73bdbed94f}{PIN\+\_\+\+STATUS\+\_\+\+VALID}}
+, \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a3c319863e0d82ee8b6697cf57003a4fe}{PIN\+\_\+\+STATUS\+\_\+\+INVALID}}
+, \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668ac668974fa5ab1be2968751f003b3469d}{PIN\+\_\+\+STATUS\+\_\+\+CANCELLED}}
+ \}
+\begin{DoxyCompactList}\small\item\em Represents the result of a key processing event in the PIN entry logic. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668}{Pin\+Status}} \mbox{\hyperlink{pin__entry_8h_a52f2b5552b92bc34e97d23d76c92a41d}{pin\+\_\+entry\+\_\+process\+\_\+key}} (\mbox{\hyperlink{structKeyEvent}{Key\+Event}} event)
+\begin{DoxyCompactList}\small\item\em Processes a raw key event and updates the internal PIN buffer. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{pin__entry_8h_a992d79db83031c8b8ec4b3616f080ee8}{pin\+\_\+entry\+\_\+get\+\_\+count}} (void)
+\begin{DoxyCompactList}\small\item\em Retrieves the number of digits currently stored in the buffer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Logic for collecting and buffering keypad digits into a PIN. 
+
+
+\begin{DoxyItemize}
+\item This module manages an internal buffer to store up to 8 digits and handles the logic for submitting or canceling the entry. 
+\end{DoxyItemize}
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{pin__entry_8h_a5800c331c1758c17b6b910eaf4e7d926}\label{pin__entry_8h_a5800c331c1758c17b6b910eaf4e7d926} 
+\index{pin\_entry.h@{pin\_entry.h}!MAX\_PIN\_LEN@{MAX\_PIN\_LEN}}
+\index{MAX\_PIN\_LEN@{MAX\_PIN\_LEN}!pin\_entry.h@{pin\_entry.h}}
+\doxysubsubsection{\texorpdfstring{MAX\_PIN\_LEN}{MAX\_PIN\_LEN}}
+{\footnotesize\ttfamily \#define MAX\+\_\+\+PIN\+\_\+\+LEN~8}
+
+
+
+The maximum number of digits allowed for a PIN entry. 
+
+
+\begin{DoxyItemize}
+\item 
+\end{DoxyItemize}
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{pin__entry_8h_a5b017e9d94770c8899419a25b103c668}\label{pin__entry_8h_a5b017e9d94770c8899419a25b103c668} 
+\index{pin\_entry.h@{pin\_entry.h}!PinStatus@{PinStatus}}
+\index{PinStatus@{PinStatus}!pin\_entry.h@{pin\_entry.h}}
+\doxysubsubsection{\texorpdfstring{PinStatus}{PinStatus}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668}{Pin\+Status}}}
+
+
+
+Represents the result of a key processing event in the PIN entry logic. 
+
+
+\begin{DoxyItemize}
+\item This status allows the caller (usually the main event loop) to determine if the \doxylink{structFSM}{FSM} needs to be updated based on user input. 
+\end{DoxyItemize}\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PIN\_STATUS\_IN\_PROGRESS@{PIN\_STATUS\_IN\_PROGRESS}!pin\_entry.h@{pin\_entry.h}}\index{pin\_entry.h@{pin\_entry.h}!PIN\_STATUS\_IN\_PROGRESS@{PIN\_STATUS\_IN\_PROGRESS}}}\Hypertarget{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a9abf05d14cc1d8b0051108c77b96fb5c}\label{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a9abf05d14cc1d8b0051108c77b96fb5c} 
+PIN\+\_\+\+STATUS\+\_\+\+IN\+\_\+\+PROGRESS&Character added, but PIN is not yet complete. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PIN\_STATUS\_VALID@{PIN\_STATUS\_VALID}!pin\_entry.h@{pin\_entry.h}}\index{pin\_entry.h@{pin\_entry.h}!PIN\_STATUS\_VALID@{PIN\_STATUS\_VALID}}}\Hypertarget{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a0767639237ccecd18cacfd73bdbed94f}\label{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a0767639237ccecd18cacfd73bdbed94f} 
+PIN\+\_\+\+STATUS\+\_\+\+VALID&User submitted a PIN and it matched the MASTER\+\_\+\+PIN. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PIN\_STATUS\_INVALID@{PIN\_STATUS\_INVALID}!pin\_entry.h@{pin\_entry.h}}\index{pin\_entry.h@{pin\_entry.h}!PIN\_STATUS\_INVALID@{PIN\_STATUS\_INVALID}}}\Hypertarget{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a3c319863e0d82ee8b6697cf57003a4fe}\label{pin__entry_8h_a5b017e9d94770c8899419a25b103c668a3c319863e0d82ee8b6697cf57003a4fe} 
+PIN\+\_\+\+STATUS\+\_\+\+INVALID&User submitted a PIN but it did not match. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PIN\_STATUS\_CANCELLED@{PIN\_STATUS\_CANCELLED}!pin\_entry.h@{pin\_entry.h}}\index{pin\_entry.h@{pin\_entry.h}!PIN\_STATUS\_CANCELLED@{PIN\_STATUS\_CANCELLED}}}\Hypertarget{pin__entry_8h_a5b017e9d94770c8899419a25b103c668ac668974fa5ab1be2968751f003b3469d}\label{pin__entry_8h_a5b017e9d94770c8899419a25b103c668ac668974fa5ab1be2968751f003b3469d} 
+PIN\+\_\+\+STATUS\+\_\+\+CANCELLED&User pressed the cancel key; buffer has been cleared. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{pin__entry_8h_a992d79db83031c8b8ec4b3616f080ee8}\label{pin__entry_8h_a992d79db83031c8b8ec4b3616f080ee8} 
+\index{pin\_entry.h@{pin\_entry.h}!pin\_entry\_get\_count@{pin\_entry\_get\_count}}
+\index{pin\_entry\_get\_count@{pin\_entry\_get\_count}!pin\_entry.h@{pin\_entry.h}}
+\doxysubsubsection{\texorpdfstring{pin\_entry\_get\_count()}{pin\_entry\_get\_count()}}
+{\footnotesize\ttfamily int pin\+\_\+entry\+\_\+get\+\_\+count (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Retrieves the number of digits currently stored in the buffer. 
+
+
+\begin{DoxyItemize}
+\item Mainly used for unit testing to verify that the buffer is filling and clearing correctly.
+\item \begin{DoxyReturn}{Returns}
+int The number of digits (0 to MAX\+\_\+\+PIN\+\_\+\+LEN). 
+\end{DoxyReturn}
+
+\end{DoxyItemize}\Hypertarget{pin__entry_8h_a52f2b5552b92bc34e97d23d76c92a41d}\label{pin__entry_8h_a52f2b5552b92bc34e97d23d76c92a41d} 
+\index{pin\_entry.h@{pin\_entry.h}!pin\_entry\_process\_key@{pin\_entry\_process\_key}}
+\index{pin\_entry\_process\_key@{pin\_entry\_process\_key}!pin\_entry.h@{pin\_entry.h}}
+\doxysubsubsection{\texorpdfstring{pin\_entry\_process\_key()}{pin\_entry\_process\_key()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{pin__entry_8h_a5b017e9d94770c8899419a25b103c668}{Pin\+Status}} pin\+\_\+entry\+\_\+process\+\_\+key (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structKeyEvent}{Key\+Event}}}]{event }\end{DoxyParamCaption})}
+
+
+
+Processes a raw key event and updates the internal PIN buffer. 
+
+
+\begin{DoxyItemize}
+\item This function manages the state of the PIN entry buffer. It appends numbers, handles cancellations, and performs a string comparison against the master PIN when a submit command is received. The buffer is automatically reset on SUBMIT or CANCEL.
+\item 
+\begin{DoxyParams}{Parameters}
+{\em event} & The raw \doxylink{structKeyEvent}{Key\+Event} received from the keypad driver/parser. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pin\+Status The resulting status of the PIN entry after this keypress.
+\end{DoxyReturn}
+
+\item \begin{DoxyNote}{Note}
+This function logs attempts to syslog and handles the transition from raw hardware events to high-\/level logic statuses. 
+\end{DoxyNote}
+
+\end{DoxyItemize}

@@ -1,0 +1,45 @@
+\doxysection{fsm\+\_\+types.\+h}
+\hypertarget{fsm__types_8h_source}{}\label{fsm__types_8h_source}\index{include/fsm\_types.h@{include/fsm\_types.h}}
+\mbox{\hyperlink{fsm__types_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ FSM\_TYPES\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ FSM\_TYPES\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a786a8e9401b8091f65b2afbd342c90f5}{STATE\_UNKNOWN}}\ =\ 0,\ }
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8ae334d166e18793e66d299c0266539a09}{STATE\_LOCKED}},\ \ \ \ \ \ }
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a23857280880480b48a5355ee6f6d07b1}{STATE\_UNLOCKED}},\ \ \ \ }
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8a5185090945dd2750f96998be663d81a0}{STATE\_ALARM}}\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00018\ \}\ \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3adc93edfd8baa5d0328141e34ace08104}{EVENT\_PIN\_VALID}}\ =\ 0,\ \ }
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3abbe4f44a586c84c6c3526e476b969574}{EVENT\_PIN\_INVALID}},\ \ \ \ }
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3acbfda252b3e79be1411753e031f2ad98}{EVENT\_PIN\_CANCEL}},\ \ \ \ \ }
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3a9e0a63e0752a49e2d88d16f9c0ea1f31}{EVENT\_DOOR\_OPEN}},\ \ \ \ \ \ }
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3abb24b1d17b3d3f42ab2730064d221f8e}{EVENT\_DOOR\_CLOSED}},\ \ \ \ }
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3a596dc8c1b60ba4769e5f606b5d75f23c}{EVENT\_TIMEOUT}}\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00031\ \}\ \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3}{Event}};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{typedef}\ void\ (*\mbox{\hyperlink{fsm__types_8h_a9f4569d60ee2bbf03bbdab6f49e74eaa}{fsm\_action\_t}})(void);}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00042\ \textcolor{keyword}{typedef}\ bool\ (*\mbox{\hyperlink{fsm__types_8h_a21ca9ade03b07df45a8f22de29a6d422}{fsm\_guard\_t}})(void);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00050\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}}\ \mbox{\hyperlink{structTransition_a8ce80999be18bddc33bb631d1ff5422f}{current}};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5667b805d857c6d28f83f6038a0272d3}{Event}}\ \mbox{\hyperlink{structTransition_a05195db9915f3e154a4397dd6c64a2f5}{event}};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a5d74787dedbc4e11c1ab15bf487e61f8}{State}}\ \mbox{\hyperlink{structTransition_a7e1128ed0426164f38df82ba0be53532}{next}};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a21ca9ade03b07df45a8f22de29a6d422}{fsm\_guard\_t}}\ \mbox{\hyperlink{structTransition_a025bd3ab42973df87feec14bc9854c9f}{guard}};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00064\ \ \ \ \ \mbox{\hyperlink{fsm__types_8h_a9f4569d60ee2bbf03bbdab6f49e74eaa}{fsm\_action\_t}}\ \mbox{\hyperlink{structTransition_a1fe09b966e8518df845f5b3d2ccee721}{action}};}
+\DoxyCodeLine{00065\ \}\ \mbox{\hyperlink{structTransition}{Transition}};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//FSM\_TYPES\_H}}
+
+\end{DoxyCode}

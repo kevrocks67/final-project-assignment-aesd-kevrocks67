@@ -1,0 +1,167 @@
+\doxysection{include/lock.h File Reference}
+\hypertarget{lock_8h}{}\label{lock_8h}\index{include/lock.h@{include/lock.h}}
+
+
+Hardware abstraction layer for servo-\/controlled door lock.  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for lock.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=164pt]{lock_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=164pt]{lock_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{lock_8h_abff0020bc75f0635843e06ba63b0e972}\label{lock_8h_abff0020bc75f0635843e06ba63b0e972} 
+\#define {\bfseries SERVO\+\_\+\+MIN\+\_\+\+DEGREE}~0
+\begin{DoxyCompactList}\small\item\em Minimum physical limit of the servo in degrees. \end{DoxyCompactList}\item 
+\Hypertarget{lock_8h_a600a905aa0df8e867a85378c665f703c}\label{lock_8h_a600a905aa0df8e867a85378c665f703c} 
+\#define {\bfseries SERVO\+\_\+\+MAX\+\_\+\+DEGREE}~180
+\begin{DoxyCompactList}\small\item\em Maximum physical limit of the servo in degrees. \end{DoxyCompactList}\item 
+\Hypertarget{lock_8h_a122171c89b538039dbea654b9908b186}\label{lock_8h_a122171c89b538039dbea654b9908b186} 
+\#define {\bfseries DOOR\+\_\+\+UNLOCKED\+\_\+\+ANGLE}~0
+\begin{DoxyCompactList}\small\item\em Angle at which door is considered unlocked. \end{DoxyCompactList}\item 
+\Hypertarget{lock_8h_a0eddc32312a957f79ca61f66d173cf00}\label{lock_8h_a0eddc32312a957f79ca61f66d173cf00} 
+\#define {\bfseries DOOR\+\_\+\+LOCKED\+\_\+\+ANGLE}~90
+\begin{DoxyCompactList}\small\item\em Angle at which door is considered locked. \end{DoxyCompactList}\item 
+\Hypertarget{lock_8h_a17340f8af794a30c5422405d1a3890c0}\label{lock_8h_a17340f8af794a30c5422405d1a3890c0} 
+\#define {\bfseries PWM\+\_\+\+CHIP\+\_\+\+PATH}~"{}/sys/class/pwm/pwmchip0"{}
+\begin{DoxyCompactList}\small\item\em The base sysfs path for the Beagle\+Bone Black PWM chip. Note\+: This index (pwmchip0) may change if other PWM overlays are loaded. \end{DoxyCompactList}\item 
+\Hypertarget{lock_8h_a0e848eb2afcca823af12a697f6006209}\label{lock_8h_a0e848eb2afcca823af12a697f6006209} 
+\#define {\bfseries PWM\+\_\+\+SUB\+\_\+\+PATH}~\mbox{\hyperlink{lock_8h_a17340f8af794a30c5422405d1a3890c0}{PWM\+\_\+\+CHIP\+\_\+\+PATH}} "{}/pwm0"{}
+\begin{DoxyCompactList}\small\item\em The sub-\/directory for the specific PWM channel being used. \end{DoxyCompactList}\item 
+\Hypertarget{lock_8h_acd1dba11989277eab79a76f9f2731bf9}\label{lock_8h_acd1dba11989277eab79a76f9f2731bf9} 
+\#define {\bfseries PWM\+\_\+\+CHANNEL}~"{}0"{}
+\begin{DoxyCompactList}\small\item\em The PWM channel to use/export. \end{DoxyCompactList}\item 
+\Hypertarget{lock_8h_a5c3b423a9dd1c36c0d461476c365156f}\label{lock_8h_a5c3b423a9dd1c36c0d461476c365156f} 
+\#define {\bfseries PWM\+\_\+\+PERIOD\+\_\+\+NS}~20000000
+\begin{DoxyCompactList}\small\item\em Standard servo period of 20ms (50Hz) expressed in nanoseconds. \end{DoxyCompactList}\item 
+\Hypertarget{lock_8h_adfb65ecdeb6967cb8a97514034d7edb7}\label{lock_8h_adfb65ecdeb6967cb8a97514034d7edb7} 
+\#define {\bfseries PWM\+\_\+\+DUTY\+\_\+\+MIN}~570000
+\begin{DoxyCompactList}\small\item\em Calibrated duty cycle for 0 degrees (True Zero) based on hardware testing. \end{DoxyCompactList}\item 
+\Hypertarget{lock_8h_a2831df0aa8b292da039c902373faa384}\label{lock_8h_a2831df0aa8b292da039c902373faa384} 
+\#define {\bfseries PWM\+\_\+\+DUTY\+\_\+\+MAX}~2490000
+\begin{DoxyCompactList}\small\item\em Calibrated duty cycle for 180 degrees based on hardware testing. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{lock_8h_af076062f1f4e6a6c91c5b494047ed018}{lock\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the PWM hardware for the servo motor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{lock_8h_a8265f546a37d4a3806c004ed123814a5}{lock\+\_\+set\+\_\+angle}} (int degrees)
+\begin{DoxyCompactList}\small\item\em Sets the servo to a specific angular position. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{lock_8h_a5cff2e7a0155ab07adcefc94ae9cce6a}{lock\+\_\+get\+\_\+angle}} (void)
+\begin{DoxyCompactList}\small\item\em Retrieves the last commanded servo angle. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{lock_8h_a28d06fdf437584f7359001e027fb0a58}{angle\+\_\+to\+\_\+duty\+\_\+cycle\+\_\+ns}} (int degrees)
+\begin{DoxyCompactList}\small\item\em Converts a human-\/readable angle to a PWM duty cycle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{lock_8h_ae1946d5cbb22e05e0d95ffc06895b777}{lock\+\_\+cleanup}} (void)
+\begin{DoxyCompactList}\small\item\em Disables PWM output and releases hardware resources. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Hardware abstraction layer for servo-\/controlled door lock. 
+
+
+\begin{DoxyItemize}
+\item Provides an interface to control a servo motor via Linux PWM sysfs, mapping angular positions to PWM duty cycles. 
+\end{DoxyItemize}
+
+\doxysubsection{Function Documentation}
+\Hypertarget{lock_8h_a28d06fdf437584f7359001e027fb0a58}\label{lock_8h_a28d06fdf437584f7359001e027fb0a58} 
+\index{lock.h@{lock.h}!angle\_to\_duty\_cycle\_ns@{angle\_to\_duty\_cycle\_ns}}
+\index{angle\_to\_duty\_cycle\_ns@{angle\_to\_duty\_cycle\_ns}!lock.h@{lock.h}}
+\doxysubsubsection{\texorpdfstring{angle\_to\_duty\_cycle\_ns()}{angle\_to\_duty\_cycle\_ns()}}
+{\footnotesize\ttfamily int angle\+\_\+to\+\_\+duty\+\_\+cycle\+\_\+ns (\begin{DoxyParamCaption}\item[{int}]{degrees }\end{DoxyParamCaption})}
+
+
+
+Converts a human-\/readable angle to a PWM duty cycle. 
+
+
+\begin{DoxyItemize}
+\item Uses linear interpolation to map degrees to the nanosecond pulse width required by standard analog servos (typically 1ms to 2ms).
+\item 
+\begin{DoxyParams}{Parameters}
+{\em degrees} & The target angle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The duty cycle in nanoseconds. 
+\end{DoxyReturn}
+
+\end{DoxyItemize}\Hypertarget{lock_8h_ae1946d5cbb22e05e0d95ffc06895b777}\label{lock_8h_ae1946d5cbb22e05e0d95ffc06895b777} 
+\index{lock.h@{lock.h}!lock\_cleanup@{lock\_cleanup}}
+\index{lock\_cleanup@{lock\_cleanup}!lock.h@{lock.h}}
+\doxysubsubsection{\texorpdfstring{lock\_cleanup()}{lock\_cleanup()}}
+{\footnotesize\ttfamily void lock\+\_\+cleanup (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Disables PWM output and releases hardware resources. 
+
+
+\begin{DoxyItemize}
+\item Disables the PWM channel and unexports it from the sysfs interface. 
+\end{DoxyItemize}\Hypertarget{lock_8h_a5cff2e7a0155ab07adcefc94ae9cce6a}\label{lock_8h_a5cff2e7a0155ab07adcefc94ae9cce6a} 
+\index{lock.h@{lock.h}!lock\_get\_angle@{lock\_get\_angle}}
+\index{lock\_get\_angle@{lock\_get\_angle}!lock.h@{lock.h}}
+\doxysubsubsection{\texorpdfstring{lock\_get\_angle()}{lock\_get\_angle()}}
+{\footnotesize\ttfamily int lock\+\_\+get\+\_\+angle (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Retrieves the last commanded servo angle. 
+
+
+\begin{DoxyItemize}
+\item \begin{DoxyReturn}{Returns}
+The current angle in degrees (0-\/180). 
+\end{DoxyReturn}
+
+\end{DoxyItemize}\Hypertarget{lock_8h_af076062f1f4e6a6c91c5b494047ed018}\label{lock_8h_af076062f1f4e6a6c91c5b494047ed018} 
+\index{lock.h@{lock.h}!lock\_init@{lock\_init}}
+\index{lock\_init@{lock\_init}!lock.h@{lock.h}}
+\doxysubsubsection{\texorpdfstring{lock\_init()}{lock\_init()}}
+{\footnotesize\ttfamily bool lock\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the PWM hardware for the servo motor. 
+
+
+\begin{DoxyItemize}
+\item Exports the PWM channel via sysfs, sets the base period to 20ms (50Hz), and enables the PWM output.
+\item \begin{DoxyReturn}{Returns}
+true if initialization succeeded, false if hardware access failed. 
+\end{DoxyReturn}
+
+\end{DoxyItemize}\Hypertarget{lock_8h_a8265f546a37d4a3806c004ed123814a5}\label{lock_8h_a8265f546a37d4a3806c004ed123814a5} 
+\index{lock.h@{lock.h}!lock\_set\_angle@{lock\_set\_angle}}
+\index{lock\_set\_angle@{lock\_set\_angle}!lock.h@{lock.h}}
+\doxysubsubsection{\texorpdfstring{lock\_set\_angle()}{lock\_set\_angle()}}
+{\footnotesize\ttfamily void lock\+\_\+set\+\_\+angle (\begin{DoxyParamCaption}\item[{int}]{degrees }\end{DoxyParamCaption})}
+
+
+
+Sets the servo to a specific angular position. 
+
+
+\begin{DoxyItemize}
+\item Calculates the required duty cycle in nanoseconds and writes it to the PWM sysfs duty\+\_\+cycle attribute.
+\item 
+\begin{DoxyParams}{Parameters}
+{\em degrees} & The target angle (clamped between 0 and 180). \\
+\hline
+\end{DoxyParams}
+
+\end{DoxyItemize}
