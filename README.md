@@ -1,9 +1,8 @@
 # Door Security Daemon
 
-![Build Status](https://github.com/kevrocks67/final-project-assignment-aesd-kevrocks67/actions/workflows/pipeline.yml/badge.svg)
+![Build Status](https://github.com/kevrocks67/final-project-assignment-aesd-kevrocks67/actions/workflows/github-actions/badge.svg)
 ![Coverage](https://img.shields.io/endpoint?url=https://kevrocks67.github.io/final-project-assignment-aesd-kevrocks67/coverage-badge.json)
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
-
 
 This is part of my final project for the CU Boulder Advanced Embedded Linux
 Development course.
@@ -17,7 +16,6 @@ updates via SWUpdate.
 
 This is meant to be deployed through a buildroot image which can be found in
 [this]("https://github.com/cu-ecen-aeld/final-project-kevrocks67") other repo.
-
 
 ## Building
 
