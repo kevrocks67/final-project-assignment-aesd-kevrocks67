@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Door Security Project Dashboard</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #333; }
+        .card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        h1 { color: #2c3e50; }
+        .status-badge { display: inline-block; padding: 5px 10px; border-radius: 4px; background: #eef; font-weight: bold; }
+        a { color: #3498db; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Door Security System Dashboard</h1>
+    <p>Automated build and quality metrics for the BeagleBone Black security daemon.</p>
+
+    <div class="card">
+        <h2>Latest Quality Metrics</h2>
+        <ul>
+            <li><strong>Unit Test Coverage:</strong> <a href="./coverage/index.html">View Detailed Report</a></li>
+            <li><strong>Technical Documentation:</strong> <a href="./docs/index.html">View Doxygen API</a></li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>System Architecture</h2>
+        <p>This project uses a <strong>Dual-Copy (A/B) Update Strategy</strong> with RSA-signed images to ensure secure and atomic OTA updates.</p>
+    </div>
+
+    <footer>
+        <p><small>Last updated: <span id="date"></span></small></p>
+    </footer>
+
+    <script>document.getElementById('date').innerText = new Date().toLocaleDateString();</script>
+</body>
+</html>
