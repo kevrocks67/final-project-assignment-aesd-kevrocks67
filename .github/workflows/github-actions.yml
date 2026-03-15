@@ -7,13 +7,12 @@ on:
   push:
     branches: ["main"]
     paths-ignore:
-      - 'README.md'
-      - '.gitignore'
+      - "README.md"
+      - ".gitignore"
 
 permissions:
   contents: write
   packages: write
-
 
 jobs:
   build-env:
@@ -135,25 +134,13 @@ jobs:
 
           git checkout -B gh-pages
 
-          # SAFETY STEP: Save the existing index.html if it exists
-          if [ -f "index.html" ]; then
-            cp index.html ../preserved_index.html
-          fi
-
-          # Wipe the branch to clean out old docs/binaries
-          git rm -rf .
-
-          # RESTORE: Put the index.html back
-          if [ -f "../preserved_index.html" ]; then
-            cp ../preserved_index.html ./index.html
-          fi
-
           # Restore Staged Assets
           cp staging/coverage_pct.txt .
-          cp -r staging/coverage_report ./coverage
+          cp -rf staging/coverage_report ./coverage
+
           mkdir -p docs
-          cp -r staging/docs/html/* ./docs/
-          cp -r staging/docs/latex ./latex_src
+          cp -rf staging/docs/html/* ./docs/
+          cp -rf staging/docs/latex ./latex_src
 
           # Badge JSON for Shields.io
           COVERAGE_PCT=$(cat coverage_pct.txt)
@@ -163,6 +150,6 @@ jobs:
           # mkdir -p releases
           # cp bin/update_v1.0.swu releases/
 
-          git add .
+          git add coverage/ docs/ latex_src/ releases/ coverage-badge.json coverage_pct.txt
           git commit -m "🚀 CI: Deploy Assets & Coverage $COVERAGE_PCT%" || echo "No changes"
           git push origin gh-pages --force
