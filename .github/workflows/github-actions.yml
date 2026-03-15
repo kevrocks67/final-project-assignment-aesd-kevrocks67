@@ -147,7 +147,7 @@ jobs:
           echo "{\"schemaVersion\": 1, \"label\": \"coverage\", \"message\": \"$COVERAGE_PCT%\", \"color\": \"green\"}" > coverage-badge.json
 
           # Keep a copy of release files on the web server
-          # mkdir -p releases
+          mkdir -p releases
           # cp bin/update_v1.0.swu releases/
 
           git add coverage/ docs/ latex_src/ releases/ coverage-badge.json coverage_pct.txt
