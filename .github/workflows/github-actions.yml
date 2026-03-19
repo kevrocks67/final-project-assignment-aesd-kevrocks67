@@ -67,6 +67,7 @@ jobs:
 
       - name: Set Version Environment Variable
         run: |
+          git config --global --add safe.directory '*'
           SHORT_SHA=$(git rev-parse --short HEAD)
           echo "VERSION=$SHORT_SHA" >> $GITHUB_ENV
           echo "GIT_HASH=$SHORT_SHA" >> $GITHUB_ENV
