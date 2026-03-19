@@ -91,6 +91,7 @@ jobs:
         env:
           PRIV_KEY: ${{ secrets.SWUPDATE_PRIVATE_KEY }}
         run: |
+          git config --global --add safe.directory '*'
           # Set Versioning using Git hash
           VERSION=$(git rev-parse --short HEAD)
           UPDATE_DIR="bin"
