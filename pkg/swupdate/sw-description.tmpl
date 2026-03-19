@@ -1,0 +1,27 @@
+software = {
+    name = "door-security-app"
+    version = "VERSION_HERE";
+    description = "Door Security Daemon Update - Build ${{ github.run_number }}";
+
+    files: (
+        {
+            filename = "door_security_daemon";
+            path = "/usr/bin/door_security_daemon";
+            sha256 = "DAEMON_HASH_HERE";
+            mode = "0755";
+        },
+        {
+            filename = "S99door_security_daemon";
+            path = "/etc/init.d/S99door_security_daemon";
+            sha256 = "INIT_HASH_HERE";
+            mode = "0755";
+        }
+    );
+
+    scripts: (
+        {
+            filename = "update_app_version.sh";
+            type = "shellscript";
+        }
+    );
+}

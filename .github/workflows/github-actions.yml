@@ -24,6 +24,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Set Version Environment Variable
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "VERSION=$SHORT_SHA" >> $GITHUB_ENV
+          echo "GIT_HASH=$SHORT_SHA" >> $GITHUB_ENV
+
       - name: Check for Dockerfile changes
         uses: dorny/paths-filter@v4
         id: filter
@@ -47,7 +53,6 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/aesd-build-env:latest
-          # Optional: Use GitHub's cache to speed up the layers
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -66,7 +71,7 @@ jobs:
         with:
           submodules: recursive
 
-      # 1. DEBUG BUILD: Coverage & Documentation
+      # DEBUG BUILD: Coverage & Documentation
       - name: Build Debug & Test
         run: |
           chmod +x build.sh
@@ -77,55 +82,69 @@ jobs:
           cp -r build/coverage_report staging/
           cp -r docs staging/
 
-      # 2. RELEASE BUILD: ARM Production Binary
+      # RELEASE BUILD: ARM Production Binary
       - name: Build Release (ARM)
         run: ./build.sh release
 
-      # 3. SWUPDATE: Hash Injection, Signing & Packaging
-      # - name: Generate Signed SWU
-      #   env:
-      #     PRIV_KEY: ${{ secrets.SWUPDATE_PRIVATE_KEY }}
-      #   run: |
-      #     DAEMON_HASH=$(sha256sum bin/door_security_daemon | awk '{print $1}')
-      #     INIT_HASH=$(sha256sum pkg/buildroot/S99door_security | awk '{print $1}')
+      # SWUPDATE: Hash Injection, Signing & Packaging
+      - name: Generate Signed SWU
+        env:
+          PRIV_KEY: ${{ secrets.SWUPDATE_PRIVATE_KEY }}
+        run: |
+          # Set Versioning using Git hash
+          VERSION=$(git rev-parse --short HEAD)
+          UPDATE_DIR="bin"
 
-      #     # Inject hashes into manifest
-      #     sed -i "s/DAEMON_HASH/$DAEMON_HASH/" pkg/swupdate/sw-description
-      #     sed -i "s/INIT_HASH/$INIT_HASH/" pkg/swupdate/sw-description
+          # Hash the packages
+          DAEMON_HASH=$(sha256sum ${UPDATE_DIR}/door_security_daemon | awk '{print $1}')
+          INIT_HASH=$(sha256sum pkg/buildroot/S99door_security_daemon | awk '{print $1}')
 
-      #     # Sign manifest
-      #     echo "$PRIV_KEY" > swupdate-priv.pem
-      #     openssl dgst -sha256 -sign swupdate-priv.pem pkg/swupdate/sw-description > pkg/swupdate/sw-description.sig
+          # Inject hashes into the sw-description template
+          cp pkg/swupdate/sw-description.tmpl ${UPDATE_DIR}/sw-description
+          sed -i "s/VERSION_HERE/$VERSION/" ${UPDATE_DIR}/sw-description
+          sed -i "s/DAEMON_HASH_HERE/$DAEMON_HASH/" ${UPDATE_DIR}/sw-description
+          sed -i "s/INIT_HASH_HERE/$INIT_HASH/" ${UPDATE_DIR}/sw-description
 
-      #     # Package SWU
-      #     cd pkg/swupdate
-      #     cp ../../bin/door_security_daemon .
-      #     cp ../buildroot/S99door_security .
-      #     chmod +x S99door_security
+          # Sign the Manifest
+          echo "$PRIV_KEY" > swupdate-priv.pem
+          openssl dgst -sha256 -sign swupdate-priv.pem \
+            -out ${UPDATE_DIR}/sw-description.sig \
+            ${UPDATE_DIR}/sw-description
+          rm swupdate-priv.pem
 
-      #     printf "sw-description\nsw-description.sig\nS99door_security\ndoor_security_daemon" | cpio -ov -H crc > ../../bin/update_v1.0.swu
+          # Copy the init script to the staging area (bin/)
+          cp pkg/buildroot/S99door_security_daemon ${UPDATE_DIR}/
+          cp pkg/swupdate/update_app_version.sh ${UPDATE_DIR}/
 
-      #     cd ../..
-      #     rm swupdate-priv.pem
+          FILES="sw-description sw-description.sig door_security_daemon S99door_security_daemon update_app_version.sh"
 
-      # 4. GITHUB RELEASE: Upload Binaries to Release UI
-      # - name: Create GitHub Release
-      #   uses: softprops/action-gh-release@v2
-      #   if: github.ref == 'refs/heads/main'
-      #   with:
-      #     tag_name: v${{ github.run_number }}
-      #     name: Release v${{ github.run_number }}
-      #     draft: false
-      #     prerelease: false
-      #     files: |
-      #       bin/door_security_daemon
-      #       bin/update_v1.0.swu
-      #       pkg/swupdate/sw-description
-      #       pkg/buildroot/S99door_security
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "Creating .swu package for version $VERSION..."
+          cd ${UPDATE_DIR}
+          for i in $FILES; do
+              echo "$i"
+          done | cpio -ov -H crc > "../door-app-update-${VERSION}.swu"
 
-      # 5. DEPLOY DASHBOARD: Push to gh-pages
+          echo "--- Build Complete: door-app-update-${VERSION}.swu ---"
+
+
+      # Upload Binaries to Release UI
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: v${{ github.run_number }}-${{ env.VERSION }}
+          name: Release v${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: |
+            bin/door_security_daemon
+            bin/door-app-update-${{ env.VERSION }}.swu
+            bin/sw-description
+            bin/S99door_security_daemon
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # DEPLOY DASHBOARD: Push to gh-pages
       - name: Deploy to gh-pages
         run: |
           git config --global user.name "github-actions"
@@ -146,10 +165,14 @@ jobs:
           COVERAGE_PCT=$(cat coverage_pct.txt)
           echo "{\"schemaVersion\": 1, \"label\": \"coverage\", \"message\": \"$COVERAGE_PCT%\", \"color\": \"green\"}" > coverage-badge.json
 
+          echo "{\"schemaVersion\": 1, \"label\": \"latest version\", \"message\": \"${{ env.VERSION }}\", \"color\": \"blue\"}" > version-badge.json
+          # Also save it as a raw text file for easy fetching by a script
+          echo "${{ env.VERSION }}" > latest_version.txt
+
           # Keep a copy of release files on the web server
           mkdir -p releases
-          # cp bin/update_v1.0.swu releases/
+          cp bin/door-app-update-${{ env.VERSION }}.swu releases/
 
-          git add coverage/ docs/ latex_src/ releases/ coverage-badge.json coverage_pct.txt
+          git add coverage docs latex_src coverage-badge.json *.json *.txt index.html
           git commit -m "🚀 CI: Deploy Assets & Coverage $COVERAGE_PCT%" || echo "No changes"
           git push origin gh-pages --force
