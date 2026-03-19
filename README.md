@@ -1,6 +1,6 @@
 # Door Security Daemon
 
-![Build Status](https://github.com/kevrocks67/final-project-assignment-aesd-kevrocks67/actions/workflows/pipeline.yml/badge.svg)
+![Build Status](https://github.com/kevrocks67/final-project-assignment-aesd-kevrocks67/actions/workflows/github-action.yml/badge.svg)
 ![Version](https://img.shields.io/endpoint?url=https://kevrocks67.github.io/final-project-assignment-aesd-kevrocks67/version-badge.json)
 ![Coverage](https://img.shields.io/endpoint?url=https://kevrocks67.github.io/final-project-assignment-aesd-kevrocks67/coverage-badge.json)
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
