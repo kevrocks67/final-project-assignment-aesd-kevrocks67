@@ -107,7 +107,11 @@ jobs:
           sed -i "s/INIT_HASH_HERE/$INIT_HASH/" ${UPDATE_DIR}/sw-description
 
           # Sign the Manifest
-          echo "$PRIV_KEY" > swupdate-priv.pem
+          printf "%s\n" "$PRIV_KEY" > swupdate-priv.pem
+          if [ ! -s swupdate-priv.pem ]; then
+              echo "ERROR: PRIV_KEY environment variable is empty!"
+              exit 1
+          fi
           openssl dgst -sha256 -sign swupdate-priv.pem \
             -out ${UPDATE_DIR}/sw-description.sig \
             ${UPDATE_DIR}/sw-description
