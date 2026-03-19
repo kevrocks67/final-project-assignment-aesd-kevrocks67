@@ -130,6 +130,8 @@ jobs:
               echo "$i"
           done | cpio -ov -H crc > "$SWU_NAME"
 
+          cp "$SWU_NAME" ../staging/
+
           echo "--- Build Complete: $SWU_NAME ---"
 
 
