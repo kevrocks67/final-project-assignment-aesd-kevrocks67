@@ -123,13 +123,14 @@ jobs:
 
           FILES="sw-description sw-description.sig door_security_daemon S99door_security_daemon update_app_version.sh"
 
+          SWU_NAME="door-app-update-${{ env.VERSION }}.swu"
           echo "Creating .swu package for version ${{ env.VERSION }}..."
           cd ${UPDATE_DIR}
           for i in $FILES; do
               echo "$i"
-          done | cpio -ov -H crc > "door-app-update-${{ env.VERSION }}.swu"
+          done | cpio -ov -H crc > "$SWU_NAME"
 
-          echo "--- Build Complete: door-app-update-${env.VERSION }}.swu ---"
+          echo "--- Build Complete: $SWU_NAME ---"
 
 
       # Upload Binaries to Release UI
@@ -157,6 +158,8 @@ jobs:
           git config --global --add safe.directory '*'
 
           git checkout -B gh-pages
+
+          ls -A | grep -vE "index.html|.gitignore|.github|staging|.git" | xargs rm -rf || true
 
           # Restore Staged Assets
           cp staging/coverage_pct.txt .
