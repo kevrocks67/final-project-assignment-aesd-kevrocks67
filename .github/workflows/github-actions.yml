@@ -24,12 +24,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set Version Environment Variable
-        run: |
-          SHORT_SHA=$(git rev-parse --short HEAD)
-          echo "VERSION=$SHORT_SHA" >> $GITHUB_ENV
-          echo "GIT_HASH=$SHORT_SHA" >> $GITHUB_ENV
-
       - name: Check for Dockerfile changes
         uses: dorny/paths-filter@v4
         id: filter
@@ -71,6 +65,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Set Version Environment Variable
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "VERSION=$SHORT_SHA" >> $GITHUB_ENV
+          echo "GIT_HASH=$SHORT_SHA" >> $GITHUB_ENV
+
       # DEBUG BUILD: Coverage & Documentation
       - name: Build Debug & Test
         run: |
@@ -93,7 +93,6 @@ jobs:
         run: |
           git config --global --add safe.directory '*'
           # Set Versioning using Git hash
-          VERSION=$(git rev-parse --short HEAD)
           UPDATE_DIR="bin"
 
           # Hash the packages
@@ -102,7 +101,7 @@ jobs:
 
           # Inject hashes into the sw-description template
           cp pkg/swupdate/sw-description.tmpl ${UPDATE_DIR}/sw-description
-          sed -i "s/VERSION_HERE/$VERSION/" ${UPDATE_DIR}/sw-description
+          sed -i "s/VERSION_HERE/${{ env.VERSION }}/" ${UPDATE_DIR}/sw-description
           sed -i "s/DAEMON_HASH_HERE/$DAEMON_HASH/" ${UPDATE_DIR}/sw-description
           sed -i "s/INIT_HASH_HERE/$INIT_HASH/" ${UPDATE_DIR}/sw-description
 
@@ -123,13 +122,13 @@ jobs:
 
           FILES="sw-description sw-description.sig door_security_daemon S99door_security_daemon update_app_version.sh"
 
-          echo "Creating .swu package for version $VERSION..."
+          echo "Creating .swu package for version ${{ env.VERSION }}..."
           cd ${UPDATE_DIR}
           for i in $FILES; do
               echo "$i"
-          done | cpio -ov -H crc > "../door-app-update-${VERSION}.swu"
+          done | cpio -ov -H crc > "bin/door-app-update-${{ env.VERSION }}.swu"
 
-          echo "--- Build Complete: door-app-update-${VERSION}.swu ---"
+          echo "--- Build Complete: door-app-update-${env.VERSION }}.swu ---"
 
 
       # Upload Binaries to Release UI
