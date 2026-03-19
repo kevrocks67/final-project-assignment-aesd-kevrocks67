@@ -179,7 +179,7 @@ jobs:
 
           # Keep a copy of release files on the web server
           mkdir -p releases
-          cp bin/door-app-update-${{ env.VERSION }}.swu releases/
+          cp staging/door-app-update-${{ env.VERSION }}.swu releases/
 
           git add coverage docs latex_src coverage-badge.json *.json *.txt index.html
           git commit -m "🚀 CI: Deploy Assets & Coverage $COVERAGE_PCT%" || echo "No changes"
