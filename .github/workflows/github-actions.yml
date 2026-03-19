@@ -127,7 +127,7 @@ jobs:
           cd ${UPDATE_DIR}
           for i in $FILES; do
               echo "$i"
-          done | cpio -ov -H crc > "bin/door-app-update-${{ env.VERSION }}.swu"
+          done | cpio -ov -H crc > "door-app-update-${{ env.VERSION }}.swu"
 
           echo "--- Build Complete: door-app-update-${env.VERSION }}.swu ---"
 
