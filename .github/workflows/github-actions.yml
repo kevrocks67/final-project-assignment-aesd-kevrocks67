@@ -131,7 +131,7 @@ jobs:
           done | cpio -ov -H crc > "$SWU_NAME"
 
           cp "$SWU_NAME" ../staging/
-
+          cd ..
           echo "--- Build Complete: $SWU_NAME ---"
 
 
@@ -159,7 +159,14 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git config --global --add safe.directory '*'
 
-          git checkout -B gh-pages
+          git add staging/
+          git stash push -m "staging"
+
+          git fetch origin gh-pages || echo "Branch does not exist yet"
+          git checkout gh-pages || git checkout -b gh-pages
+
+          git stash pop || echo "Nothing to restore"
+          git reset staging/
 
           ls -A | grep -vE "index.html|.gitignore|.github|staging|.git" | xargs rm -rf || true
 
@@ -183,6 +190,7 @@ jobs:
           mkdir -p releases
           cp staging/door-app-update-${{ env.VERSION }}.swu releases/
 
-          git add coverage docs latex_src coverage-badge.json *.json *.txt index.html
+          rm -rf staging
+          git add .
           git commit -m "🚀 CI: Deploy Assets & Coverage $COVERAGE_PCT%" || echo "No changes"
           git push origin gh-pages --force
