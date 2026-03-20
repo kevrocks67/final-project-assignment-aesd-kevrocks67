@@ -1,12 +1,29 @@
 #!/bin/sh
 # This script is executed by the swupdate daemon after files are moved.
 
-# Update the App-specific version file
-echo "$SWUPDATE_VERSION" > /data/app-version
+PHASE="$1"
 
-# Restart the daemon so the new binary actually starts running
-if [ -f "/etc/init.d/S99door_security_daemon" ]; then
-    /etc/init.d/S99door_security_daemon restart
-fi
+case "$PHASE" in
+    preinst)
+        echo "Phase: preinst. Ensuring daemon is stopped..."
+        if [ -f "/etc/init.d/S99door_security_daemon" ]; then
+            /etc/init.d/S99door_security_daemon stop
+        fi
+        sleep 1
+        ;;
+    postinst)
+        echo "Phase: postinst. Installation successful, starting service..."
+        # Restart the daemon so the new binary actually starts running
+        if [ -f "/etc/init.d/S99door_security_daemon" ]; then
+            /etc/init.d/S99door_security_daemon restart
+        fi
+        ;;
+    postfailure)
+        echo "Phase: postfailure. Update failed, ensuring daemon is running..."
+        if [ -f "/etc/init.d/S99door_security_daemon" ]; then
+            /etc/init.d/S99door_security_daemon start
+        fi
+        ;;
+esac
 
 exit 0
