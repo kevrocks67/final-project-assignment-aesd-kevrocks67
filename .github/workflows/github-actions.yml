@@ -99,12 +99,14 @@ jobs:
           # Hash the packages
           DAEMON_HASH=$(sha256sum ${UPDATE_DIR}/door_security_daemon | awk '{print $1}')
           INIT_HASH=$(sha256sum pkg/buildroot/S99door_security_daemon | awk '{print $1}')
+          SHELLSCRIPT_HASH=$(sha256sum pkg/swupdate/update_app_version.sh | awk '{print $1}')
 
           # Inject hashes into the sw-description template
           cp pkg/swupdate/sw-description.tmpl ${UPDATE_DIR}/sw-description
           sed -i "s/VERSION_HERE/${{ env.VERSION }}/" ${UPDATE_DIR}/sw-description
           sed -i "s/DAEMON_HASH_HERE/$DAEMON_HASH/" ${UPDATE_DIR}/sw-description
           sed -i "s/INIT_HASH_HERE/$INIT_HASH/" ${UPDATE_DIR}/sw-description
+          sed -i "s/SHELLSCRIPT_HASH_HERE/$SHELLSCRIPT_HASH/" ${UPDATE_DIR}/sw-description
 
           # Sign the Manifest
           printf "%s\n" "$PRIV_KEY" > swupdate-priv.pem
