@@ -15,7 +15,7 @@ case "$PHASE" in
         echo "Phase: postinst. Installation successful, starting service..."
         # Restart the daemon so the new binary actually starts running
         if [ -f "/etc/init.d/S99door_security_daemon" ]; then
-            /etc/init.d/S99door_security_daemon restart
+            /etc/init.d/S99door_security_daemon start
         fi
         ;;
     postfailure)

@@ -9,12 +9,18 @@ software = {
             path = "/usr/bin/door_security_daemon";
             sha256 = "DAEMON_HASH_HERE";
             mode = "0755";
+            name = "door_security_daemon";
+            install-if-different = true;
+            version = "VERSION_HERE"
         },
         {
             filename = "S99door_security_daemon";
             path = "/etc/init.d/S99door_security_daemon";
             sha256 = "INIT_HASH_HERE";
             mode = "0755";
+            name = "S99door_security_daemon";
+            install-if-different = true;
+            version = "VERSION_HERE"
         }
     );
 
@@ -23,7 +29,6 @@ software = {
             filename = "update_app_version.sh";
             type = "shellscript";
             sha256 = "SHELLSCRIPT_HASH_HERE";
-            hook = "postinst";
         }
     );
 }
